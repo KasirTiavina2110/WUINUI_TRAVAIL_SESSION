@@ -4,11 +4,29 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:class2"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:class"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:class2"
     mc:Ignorable="d">
 
-    <StackPanel >
+
+    <NavigationView PaneDisplayMode="Left" PaneTitle="Gestion des activités" x:Name="navView"
+                     IsSettingsVisible="False" IsBackButtonVisible="Collapsed"
+                     SelectionChanged="navView_SelectionChanged"
+                     >
+        <NavigationView.MenuItems>
+            <NavigationViewItem Content="Connexion" x:Name="connexion" Icon="TouchPointer" ToolTipService.ToolTip="connexion"/>
+            <NavigationViewItem Content="Voir activités" x:Name="voirActivite" Icon="Home" ToolTipService.ToolTip="Home" Tag="SamplePage1"/>
+            <NavigationViewItem Content="Accès administrateur" Icon="Admin" ToolTipService.ToolTip="accesAdmin" SelectsOnInvoked="False">
+                <NavigationViewItem.MenuItems>
+                    <NavigationViewItem Content="Ajouter un usager" x:Name="ajouterUsager" Icon="AddFriend" ToolTipService.ToolTip="Create new" Tag="SamplePage5"/>
+                    <NavigationViewItem Content="Supprimer un usager" x:Name="supprimerUsager" Icon="Delete" ToolTipService.ToolTip="Upload file" Tag="SamplePage6"/>
+                    <NavigationViewItem Content="Modifier un usager" x:Name="modifierUsager" Icon="Setting" ToolTipService.ToolTip="Modifie file" Tag="SamplePage7"/>
+                    <NavigationViewItem Content="Ajouter une séance" x:Name="ajouterSeance" Icon="Add" ToolTipService.ToolTip="Create activitie" Tag="SamplePage8"/>
+                    <NavigationViewItem Content="Statistiques" x:Name="voirStatistique" Icon="Calculator" ToolTipService.ToolTip="statistique" Tag="SamplePage9"/>
+                </NavigationViewItem.MenuItems>
+            </NavigationViewItem>
+        </NavigationView.MenuItems>
 
 
-    </StackPanel>
+        <Frame x:Name="mainFrame"/>
+    </NavigationView>
 </Window>

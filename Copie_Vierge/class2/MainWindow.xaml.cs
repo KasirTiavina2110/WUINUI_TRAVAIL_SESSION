@@ -1,4 +1,4 @@
-﻿using @class;
+﻿using @class2;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -36,10 +36,52 @@ namespace class2
         public MainWindow()
         {
             this.InitializeComponent();
-
+            mainFrame.Navigate(typeof(AffichageSeance));
 
         }
+        private async void navView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            //On vient chercher les éléments de Type NavigationViewItem (comme la balise)
+            var item = args.SelectedItem as NavigationViewItem;
 
-   
+            //On fait un switch pour aller chercher le x:Name
+            switch (item.Name)
+            {
+                case "voirActivite":
+                    mainFrame.Navigate(typeof(AffichageSeance));
+                    break;
+                case "ajouterUsager":
+                    mainFrame.Navigate(typeof(AjouterUsager));
+                    break;
+                case "supprimerUsager":
+                    mainFrame.Navigate(typeof(SupprimerUsager));
+                    break;
+                case "modifierUsager":
+                    mainFrame.Navigate(typeof(ModifierUsager));
+                    break;
+                case "ajouterSeance":
+                    mainFrame.Navigate(typeof(AjouterSeance));
+                    break;
+                case "voirStatistique":
+                    mainFrame.Navigate(typeof(VoirStatistique));
+                    break;
+                case "connexion":
+
+                    ModalConnexion modalConnexion = new ModalConnexion();
+
+                    modalConnexion.XamlRoot = navView.XamlRoot;
+
+                    modalConnexion.PrimaryButtonText = "Se connecter";
+                    modalConnexion.Title = "Informations de connexion";
+                    modalConnexion.CloseButtonText = "Annuler";
+
+                    var result = await modalConnexion.ShowAsync();
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 }
