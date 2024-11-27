@@ -12,7 +12,73 @@
     <Grid>
 
 
-        <TextBlock Foreground="Red">Voici la page ajouter usagers</TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <TextBlock FontSize="25" Margin="0 25 0 25" TextDecorations="Underline">Formulaire d'ajouts d'un usager</TextBlock>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin=" 0 0 0 25">
+            <StackPanel Margin="0 0 20 0">
+                <TextBox PlaceholderText="Entrer le nom" x:Name="nom" Width="250"></TextBox>
+                <TextBlock x:Name="erreur_nom" Foreground="Red"></TextBlock>
+                
+            </StackPanel>
+
+            <StackPanel>
+                <TextBox PlaceholderText="Prénom" Width="250"></TextBox>
+                <TextBlock x:Name="erreur_prenom" Foreground="Red"></TextBlock>
+
+            </StackPanel>
+      
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+            <TextBox PlaceholderText="Entrer l'année" x:Name="annee" Width="400"></TextBox>
+            <TextBlock x:Name="erreur_annee" Foreground="Red"></TextBlock>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+            <TextBox PlaceholderText="Le cout de l'organisation" x:Name="cout_organisation" Width="400"></TextBox>
+            <TextBlock x:Name="erreur_cout_organisation" Foreground="Red"></TextBlock>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+            <TextBox PlaceholderText="Le prix de vente aux adhérents" x:Name="prix_vente" Width="400"></TextBox>
+            <TextBlock x:Name="erreur_prix_vente" Foreground="Red"></TextBlock>
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <ComboBox x:Name="choix_type">
+                <x:String>Artistique</x:String>
+                <x:String>Artisanat</x:String>
+                <x:String>Bien-être</x:String>
+                <x:String>Culinaire</x:String>
+                <x:String>Scientifique</x:String>
+                <x:String>Sportif</x:String>
+            </ComboBox>
+            <TextBlock Name="erreur_choix_type" Foreground="Red"></TextBlock>
+        </StackPanel>
+
+
 
     </Grid>
 </Page>
