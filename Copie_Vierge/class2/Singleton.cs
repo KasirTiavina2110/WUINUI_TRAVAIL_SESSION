@@ -85,6 +85,38 @@ namespace class2
 
         }
 
+        //Supprimer une activité 
+
+        public void supprimerActivite(Activite activite)
+        {
+
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "DELETE FROM activite WHERE id_activite = @activite";
+                commande.Parameters.AddWithValue("@activite", activite.Id);
+
+                con.Open();
+                int i = commande.ExecuteNonQuery();
+                con.Close();
+
+                if (i > 0)
+                {
+                    // Suppression réussie dans la base de données, maintenant on enlève de la collection
+                    listeActivite.Remove(activite);
+                }
+            }
+            catch
+            {
+                if (con.State == System.Data.ConnectionState.Open) //Pour vérifier que la connexion est ouverte, sinon ca va planter
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
 
     }
 }

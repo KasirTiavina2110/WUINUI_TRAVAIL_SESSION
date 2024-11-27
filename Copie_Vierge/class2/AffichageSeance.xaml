@@ -48,7 +48,7 @@
                                         <TextBlock x:Name="frwfrew" Text="{x:Bind Type , Mode=OneWay}" Margin="5,5,5,10"/>
                                     </StackPanel>
                                     <StackPanel>
-                                        <Button x:Name="Delete"  Margin="20 0 0 0">
+                                        <Button x:Name="Delete" Click="Delete_Click"  Margin="20 0 0 0">
                                             <SymbolIcon Symbol="Delete"/>
                                         </Button>
                                     </StackPanel>

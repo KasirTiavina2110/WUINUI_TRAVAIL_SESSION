@@ -33,7 +33,16 @@ namespace class2
         }
 
 
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
 
+            Activite activite = button.DataContext as Activite;
+
+            Singleton.getInstance().supprimerActivite(activite);
+
+
+        }
 
 
 
@@ -53,5 +62,6 @@ namespace class2
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }
