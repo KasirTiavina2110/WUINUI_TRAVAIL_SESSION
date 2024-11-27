@@ -7,25 +7,55 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Title="Connexion"
+    PrimaryButtonText="Se connecter"
+    CloseButtonText="Annuler"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    Closing="ContentDialog_Closing"    
-    >
-    <StackPanel>
+    Closing="ContentDialog_Closing">
 
-        <TextBox x:Name="matricule" Margin="10 0 0 0" Header="Entrez vote matricule"/>
-        <TextBlock x:Name="erreur_matricule" Foreground="Red" FontSize="15" Margin="10 0 0 10"/>
+    <StackPanel Spacing="10" Padding="20">
 
-        <TextBox x:Name="mdp" Margin="10 0 0 0" Header="Entrez votre mot de passe"></TextBox>
-        <TextBlock x:Name="erreur_mdp" Foreground="Red" FontSize="15" Margin="10 0 0 10"/>
+        <!-- Matricule -->
+        <TextBox
+            x:Name="matricule"
+            Header="Matricule"
+            PlaceholderText="Exemple : AD-1995-874"
+            Margin="0 10 0 0" />
+        <TextBlock
+            x:Name="erreur_matricule"
+            Foreground="Red"
+            FontSize="14"
+            Visibility="Collapsed"
+            Text="Erreur : Matricule incorrect." />
 
+        <!-- Mot de passe -->
+        <PasswordBox
+            x:Name="mdp"
+            Header="Mot de passe"
+            PlaceholderText="Entrez votre mot de passe"
+            Margin="0 10 0 0" />
+        <TextBlock
+            x:Name="erreur_mdp"
+            Foreground="Red"
+            FontSize="14"
+            Visibility="Collapsed"
+            Text="Erreur : Mot de passe incorrect." />
 
-        <ComboBox x:Name="roleUsager" Header="Choississez votre rôle" Margin="10">
-            <x:String>Usager</x:String>
-            <x:String>Administrateur</x:String>
-
+        <!-- Rôle -->
+        <ComboBox
+            x:Name="roleUsager"
+            Header="Rôle"
+            Margin="0 10 0 0"
+            PlaceholderText="Sélectionnez un rôle">
+            <ComboBoxItem Content="adherent" />
+            <ComboBoxItem Content="admin" />
         </ComboBox>
-        <TextBlock Name="erreur_roleUsager" Margin="10 0 0 25" Foreground="Red"></TextBlock>
-
+        <TextBlock
+            x:Name="erreur_roleUsager"
+            Foreground="Red"
+            FontSize="14"
+            Visibility="Collapsed"
+            Text="Erreur : Veuillez sélectionner un rôle." />
 
     </StackPanel>
 </ContentDialog>

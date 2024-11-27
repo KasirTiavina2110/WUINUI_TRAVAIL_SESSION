@@ -1,86 +1,100 @@
-﻿using @class2;
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace class2
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    /// 
-  
-
-    public sealed partial class MainWindow : Window, INotifyPropertyChanged
+    public sealed partial class MainWindow : Window
     {
-       
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public MainWindow()
         {
             this.InitializeComponent();
+            // Page par défaut affichée
             mainFrame.Navigate(typeof(AffichageSeance));
 
+            // Masque les options administratives au démarrage
+            adminSection.Visibility = Visibility.Collapsed;
         }
+
         private async void navView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            //On vient chercher les éléments de Type NavigationViewItem (comme la balise)
             var item = args.SelectedItem as NavigationViewItem;
 
-            //On fait un switch pour aller chercher le x:Name
             switch (item.Name)
             {
                 case "voirActivite":
                     mainFrame.Navigate(typeof(AffichageSeance));
                     break;
-                case "ajouterUsager":
-                    mainFrame.Navigate(typeof(AjouterUsager));
-                    break;
-                case "supprimerUsager":
-                    mainFrame.Navigate(typeof(SupprimerUsager));
-                    break;
-                case "modifierUsager":
-                    mainFrame.Navigate(typeof(ModifierUsager));
-                    break;
-                case "ajouterSeance":
-                    mainFrame.Navigate(typeof(AjouterSeance));
-                    break;
-                case "voirStatistique":
-                    mainFrame.Navigate(typeof(VoirStatistique));
-                    break;
                 case "connexion":
-
-                    ModalConnexion modalConnexion = new ModalConnexion();
-
+                    var modalConnexion = new ModalConnexion();
                     modalConnexion.XamlRoot = navView.XamlRoot;
+                    await modalConnexion.ShowAsync();
 
-                    modalConnexion.PrimaryButtonText = "Se connecter";
-                    modalConnexion.Title = "Informations de connexion";
-                    modalConnexion.CloseButtonText = "Annuler";
-
-                    var result = await modalConnexion.ShowAsync();
-
+                    // Redirection après connexion
+                    if (SessionManager.Instance.UsagerConnecte != null)
+                    {
+                        RedirigerSelonRole();
+                    }
+                    break;
+                case "deconnexion":
+                    DeconnecterUsager();
                     break;
                 default:
                     break;
             }
+        }
+
+        private void RedirigerSelonRole()
+        {
+            var usager = SessionManager.Instance.UsagerConnecte;
+
+            if (usager.Role == "admin")
+            {
+                mainFrame.Navigate(typeof(ModifierUsager));
+                adminSection.Visibility = Visibility.Visible; // Montre les options admin
+            }
+            else if (usager.Role == "adherent")
+            {
+                mainFrame.Navigate(typeof(AffichageSeance));
+                adminSection.Visibility = Visibility.Collapsed; // Cache les options admin
+            }
+        }
+
+        private void DeconnecterUsager()
+        {
+            // Vérifie si aucun utilisateur n'est connecté
+            if (SessionManager.Instance.UsagerConnecte == null)
+            {
+                // Affiche une notification indiquant qu'il n'y a pas d'utilisateur connecté
+                var dialog = new ContentDialog
+                {
+                    Title = "Déconnexion",
+                    Content = "Vous n'êtes pas connecté.",
+                    CloseButtonText = "OK",
+                    XamlRoot = navView.XamlRoot
+                };
+                _ = dialog.ShowAsync();
+                return;
+            }
+
+            // Déconnecte l'utilisateur
+            SessionManager.Instance.DeconnecterUsager();
+
+            // Retourne à la page d'accueil
+            mainFrame.Navigate(typeof(AffichageSeance));
+
+            // Cache les options administratives
+            adminSection.Visibility = Visibility.Collapsed;
+
+            // Affiche une notification de déconnexion réussie
+            var successDialog = new ContentDialog
+            {
+                Title = "Déconnexion",
+                Content = "Vous avez été déconnecté avec succès.",
+                CloseButtonText = "OK",
+                XamlRoot = navView.XamlRoot
+            };
+            _ = successDialog.ShowAsync();
         }
 
     }
