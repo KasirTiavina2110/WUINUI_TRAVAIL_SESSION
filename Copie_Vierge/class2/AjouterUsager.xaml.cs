@@ -29,7 +29,7 @@ namespace class2
         {
             this.InitializeComponent();
 
-            SetDatePicker();
+            SetDatePicker(); //Pour personnalisé le DatePicker
 
         }
 
@@ -39,7 +39,6 @@ namespace class2
             DateTime aujourdhui = DateTime.Now;
             DateTime anneeMax = aujourdhui.AddYears(-18);
   
-
             annee_naissance.MaxYear = anneeMax;
         }
 
@@ -90,34 +89,37 @@ namespace class2
 
             if (valide)
             {
+                //Assigner les valeurs des champs
+                string nomUsager = nom.Text;
+                string prenomUsager = prenom.Text;
+                string adresseUsager = adresse_usager.Text;
+                var dateNaissanceUsager = annee_naissance.SelectedDate.Value;
+                string dateFinale = dateNaissanceUsager.ToString("yyyy-MM-dd");
 
-                try
+
+                int ageUsager = DateTime.Now.Year - dateNaissanceUsager.Year;
+                //Calcul si la fête est passé pour décrémenter si pas passé
+                if (DateTime.Now.DayOfYear < dateNaissanceUsager.DayOfYear)
                 {
-
-                    string nomUsager = nom.Text;
-                    string prenomUsager = prenom.Text;
-                    string adresseUsager = adresse_usager.Text;
-                    var dateNaissanceUsager = annee_naissance.SelectedDate.Value;
-                    string dateFinale = dateNaissanceUsager.ToString("yyyy-MM-dd");
-
-
-                    int ageUsager = DateTime.Now.Year - dateNaissanceUsager.Year;
-                    string roleUsager = role.SelectedItem as string;
-                    string motDePasseUsager = mot_de_passe.Password;
-
-                    var usager = new Usager(nomUsager, prenomUsager, adresseUsager, dateFinale, ageUsager, roleUsager, motDePasseUsager);
-
-
-                    //reste à ajouter le produit avec le Singleton
-
+                    ageUsager--;
                 }
-                catch (Exception ex)
-                {
-                    erreur_annee_naissance.Text = "Fonctionne crisss";
-                }
-             
+
+                string roleUsager = role.SelectedItem as string;
+                string motDePasseUsager = mot_de_passe.Password;
+
+                var usager = new Usager(nomUsager, prenomUsager, adresseUsager, dateFinale, ageUsager, roleUsager, motDePasseUsager);
 
 
+                //Ajouter l'usager dans la BD
+                Singleton.getInstance().ajouterUsager(usager);
+
+                //Vider les champs du formulaire
+                nom.Text = string.Empty;
+                prenom.Text = string.Empty;
+                adresse_usager.Text = string.Empty;
+                annee_naissance.SelectedDate = null;
+                role.SelectedIndex = -1;
+                mot_de_passe.Password = string.Empty;
 
             }
 

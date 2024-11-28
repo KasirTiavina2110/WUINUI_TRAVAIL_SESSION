@@ -37,14 +37,15 @@
 
             <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center">
                 
-                <TextBox Header="Entrer le matricule de l'usager" Width="400"></TextBox>
+                <TextBox Header="Entrer le matricule de l'usager" Width="400" x:Name="matricule"></TextBox>
                 <TextBlock x:Name="erreur_matricule" Foreground="Red"></TextBlock>
                 
             </StackPanel>
 
 
             <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 75 0 0">
-                <Button>Supprimer</Button>
+                <Button x:Name="bouton_supprimer" Click="bouton_supprimer_Click">Supprimer</Button>
+                <TextBlock x:Name="suppression_reussi" Foreground="Green"></TextBlock>
                 
             </StackPanel>
 

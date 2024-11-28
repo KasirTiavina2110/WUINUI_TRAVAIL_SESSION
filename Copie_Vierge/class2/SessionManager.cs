@@ -16,7 +16,7 @@ namespace class2
         private SessionManager()
         {
             // Remplacez par vos informations de connexion MySQL
-            _connectionString = "Server=cours.cegep3r.info;Database=a2024_420335ri_eq11;Uid=1748697;Pwd=1748697;";
+            _connectionString = "Server=cours.cegep3r.info;Database=a2024_420-345-ri_eq15;Uid=1748697;Pwd=1748697;";
         }
 
         public static SessionManager Instance

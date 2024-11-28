@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Collections.ObjectModel;
+using System.Configuration;
 
 
 
@@ -22,7 +23,7 @@ namespace class2
 
         public Singleton()
         {
-            con = new MySqlConnection("Server=cours.cegep3r.info;Database=a2024_420335ri_eq11;Uid=1748697;Pwd=1748697;");
+            con = new MySqlConnection("Server=cours.cegep3r.info;Database=a2024_420-345-ri_eq15;Uid=1748697;Pwd=1748697;");
             listeActivite = new ObservableCollection<Activite>();
 
 
@@ -85,7 +86,8 @@ namespace class2
 
         }
 
-        //Supprimer une activité 
+        //Supprimer une activité, RESTE VÉRIFIER POUR ÊTRE SÛR QUE CA FONCTIONNE
+        //J'attend l'ajout d'activité pour tester
 
         public void supprimerActivite(Activite activite)
         {
@@ -116,6 +118,74 @@ namespace class2
             }
 
         }
+
+
+        //Ajouter un usager
+        public void ajouterUsager(Usager usager)
+        {
+            try
+            {
+                string nom = usager.Nom;
+                string prenom = usager.Prenom;
+                string adresse = usager.Adresse;
+                string dateNaissance = usager.DateNaissance2;
+                int age = usager.Age;
+                string role = usager.Role.ToLower();
+                string motDePasse = usager.MotDePasse;
+
+
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "INSERT INTO adherent (nom, prenom, adresse, date_naissance, age, role, mot_de_passe) VALUES(@nom,@prenom,@adresse,@dateNaissance,@age,@role,@motDePasse)";
+                commande.Parameters.AddWithValue("@nom", nom);
+                commande.Parameters.AddWithValue("@prenom", prenom);
+                commande.Parameters.AddWithValue("@adresse", adresse);
+                commande.Parameters.AddWithValue("@dateNaissance", dateNaissance);
+                commande.Parameters.AddWithValue("@age", age);
+                commande.Parameters.AddWithValue("@role", role);
+                commande.Parameters.AddWithValue("@motDePasse", motDePasse);
+
+                con.Open();
+                commande.Prepare();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open) //Pour vérifier que la connexion est ouverte, sinon ca va planter
+                {
+                    con.Close();
+                }
+
+
+            }
+
+        }
+
+        //Supprimer un usager
+        public int supprimerUsager(string matricule)
+        {
+
+            string numero_identifiaction = matricule;
+
+            MySqlCommand commande = new MySqlCommand();
+
+            commande.Connection = con;
+            commande.CommandText = "DELETE FROM adherent WHERE numero_identification = @matricule";
+            commande.Parameters.AddWithValue("@matricule", numero_identifiaction);
+
+            con.Open();
+
+            int i = commande.ExecuteNonQuery();
+
+            con.Close();
+
+            return i;
+
+        }
+
 
 
     }
