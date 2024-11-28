@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
+using Windows.UI;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,49 @@ namespace class2
     /// </summary>
     public sealed partial class SupprimerUsager : Page
     {
+
+        bool valide;
         public SupprimerUsager()
         {
             this.InitializeComponent();
+        }
+
+        private void bouton_supprimer_Click(object sender, RoutedEventArgs e)
+        {
+
+            valide = true;
+
+            //Vider le champ d'erreur
+            erreur_matricule.Text = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(matricule.Text))
+            {
+                erreur_matricule.Text = "Le matricule est obligatoire";
+                valide = false;
+            }
+            if(valide)
+            {
+
+                string identifiant = matricule.Text.ToUpper();
+
+                int reponseRequete =  Singleton.getInstance().supprimerUsager(identifiant);
+
+                if(reponseRequete > 0)
+                {
+                    suppression_reussi.Text = "Utilisateur supprimé avec succès";
+                    matricule.Text = string.Empty;
+  
+                }
+                else
+                {
+                    erreur_matricule.Text = "Le numéro d'identification n'existe pas dans le système";
+
+                }
+
+                
+            }
+
+
         }
     }
 }

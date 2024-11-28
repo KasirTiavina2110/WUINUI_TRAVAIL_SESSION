@@ -85,6 +85,16 @@ namespace class2
             }
         }
 
+        public string DateNaissance2
+        {
+            get => dateNaissance2;
+            set
+            {
+                dateNaissance2 = value;
+                OnPropertyChanged(nameof(DateNaissance2));
+            }
+        }
+
         public int Age
         {
             get => age;

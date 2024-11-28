@@ -63,11 +63,6 @@
 
             </StackPanel>
 
-            <!--On mettrait l'âge ici si besoin-->
-            <!--<StackPanel Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
-                <TextBox PlaceholderText="Le prix de vente aux adhérents" x:Name="prix_vente" Width="400"></TextBox>
-                <TextBlock x:Name="erreur_prix_vente" Foreground="Red"></TextBlock>
-            </StackPanel>-->
 
             <StackPanel Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
                 <PasswordBox PlaceholderText="Mot de passe" x:Name="mot_de_passe" Width="400"></PasswordBox>
@@ -85,7 +80,7 @@
 
             <StackPanel Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 80 0 0">
                 <Button Width="150" x:Name="bouton_ajout_usager" Click="bouton_ajout_usager_Click">Créer</Button>
-
+                <TextBlock x:Name="erreur_creation" Foreground="Red"></TextBlock>
             </StackPanel>
 
 
