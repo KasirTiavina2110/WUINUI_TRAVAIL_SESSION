@@ -9,10 +9,53 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+
+    <ScrollViewer>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBlock FontSize="25" Margin="0 25 5 25" TextDecorations="Underline">Formulaire de supression d'un usager</TextBlock>
+                <SymbolIcon Symbol="Delete" Margin="0 5 0 0"></SymbolIcon>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                
+                <TextBox Header="Entrer le matricule de l'usager" Width="400"></TextBox>
+                <TextBlock x:Name="erreur_matricule" Foreground="Red"></TextBlock>
+                
+            </StackPanel>
 
 
-        <TextBlock Foreground="Red">Voici la page Supprimer Usagers</TextBlock>
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 75 0 0">
+                <Button>Supprimer</Button>
+                
+            </StackPanel>
 
-    </Grid>
+            <StackPanel Grid.Row="4" Margin="20 0 0 0">
+                <TextBlock Foreground="Red">**L'action de supprimer efface définitivement le compte de l'usager**</TextBlock>
+
+            </StackPanel>
+
+        </Grid>
+
+
+    </ScrollViewer>
+
 </Page>

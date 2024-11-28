@@ -9,76 +9,86 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+
+    <ScrollViewer>
+        <Grid>
 
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
 
-        </Grid.RowDefinitions>
+            </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
 
-        </Grid.ColumnDefinitions>
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <TextBlock FontSize="25" Margin="0 25 0 25" TextDecorations="Underline">Formulaire d'ajouts d'un usager</TextBlock>
-        </StackPanel>
+            <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                <TextBlock FontSize="25" Margin="0 25 0 25" TextDecorations="Underline">Formulaire d'ajouts d'un usager</TextBlock>
+            </StackPanel>
 
 
-        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin=" 0 0 0 25">
-            <StackPanel Margin="0 0 20 0">
-                <TextBox PlaceholderText="Entrer le nom" x:Name="nom" Width="250"></TextBox>
-                <TextBlock x:Name="erreur_nom" Foreground="Red"></TextBlock>
+            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin=" 0 0 0 25">
+                <StackPanel Margin="0 0 20 0">
+                    <TextBox PlaceholderText="Entrer le nom" x:Name="nom" Width="250"></TextBox>
+                    <TextBlock x:Name="erreur_nom" Foreground="Red"></TextBlock>
                 
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBox PlaceholderText="Prénom" x:Name="prenom" Width="250"></TextBox>
+                    <TextBlock x:Name="erreur_prenom" Foreground="Red"></TextBlock>
+
+                </StackPanel>
+            
             </StackPanel>
 
-            <StackPanel>
-                <TextBox PlaceholderText="Prénom" Width="250"></TextBox>
-                <TextBlock x:Name="erreur_prenom" Foreground="Red"></TextBlock>
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+                <DatePicker x:Name="annee_naissance" Width="400" Header="Date de naissance"></DatePicker>
+                <TextBlock x:Name="erreur_annee_naissance" Foreground="Red"></TextBlock>
 
             </StackPanel>
-      
 
-        </StackPanel>
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+                <TextBox PlaceholderText="L'adresse de l'usager" x:Name="adresse_usager" Width="400"></TextBox>
+                <TextBlock x:Name="erreur_adresse_usager" Foreground="Red"></TextBlock>
 
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
-            <TextBox PlaceholderText="Entrer l'année" x:Name="annee" Width="400"></TextBox>
-            <TextBlock x:Name="erreur_annee" Foreground="Red"></TextBlock>
+            </StackPanel>
 
-        </StackPanel>
+            <!--On mettrait l'âge ici si besoin-->
+            <!--<StackPanel Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+                <TextBox PlaceholderText="Le prix de vente aux adhérents" x:Name="prix_vente" Width="400"></TextBox>
+                <TextBlock x:Name="erreur_prix_vente" Foreground="Red"></TextBlock>
+            </StackPanel>-->
 
-        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
-            <TextBox PlaceholderText="Le cout de l'organisation" x:Name="cout_organisation" Width="400"></TextBox>
-            <TextBlock x:Name="erreur_cout_organisation" Foreground="Red"></TextBlock>
+            <StackPanel Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+                <PasswordBox PlaceholderText="Mot de passe" x:Name="mot_de_passe" Width="400"></PasswordBox>
+                <TextBlock x:Name="erreur_mot_de_passe" Foreground="Red"></TextBlock>
+            </StackPanel>
 
-        </StackPanel>
+            <StackPanel Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                <ComboBox Header="Choississez le rôle de l'usager" x:Name="role">
+                        <x:String>Admin</x:String>
+                        <x:String>Adhérent</x:String>
+                    </ComboBox>
 
-        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
-            <TextBox PlaceholderText="Le prix de vente aux adhérents" x:Name="prix_vente" Width="400"></TextBox>
-            <TextBlock x:Name="erreur_prix_vente" Foreground="Red"></TextBlock>
-        </StackPanel>
+                <TextBlock Name="erreur_role" Foreground="Red"></TextBlock>
+            </StackPanel>
 
-        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <ComboBox x:Name="choix_type">
-                <x:String>Artistique</x:String>
-                <x:String>Artisanat</x:String>
-                <x:String>Bien-être</x:String>
-                <x:String>Culinaire</x:String>
-                <x:String>Scientifique</x:String>
-                <x:String>Sportif</x:String>
-            </ComboBox>
-            <TextBlock Name="erreur_choix_type" Foreground="Red"></TextBlock>
-        </StackPanel>
+            <StackPanel Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 80 0 0">
+                <Button Width="150" x:Name="bouton_ajout_usager" Click="bouton_ajout_usager_Click">Créer</Button>
 
+            </StackPanel>
 
 
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </Page>

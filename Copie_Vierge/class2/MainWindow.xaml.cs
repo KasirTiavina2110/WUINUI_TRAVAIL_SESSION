@@ -20,6 +20,8 @@ namespace class2
         {
             var item = args.SelectedItem as NavigationViewItem;
 
+
+            // ------------------------------------ Manque peut-être une page pour voir les séances--------------------------------------------
             switch (item.Name)
             {
                 case "voirActivite":
@@ -27,6 +29,18 @@ namespace class2
                     break;
                 case "ajouterUsager":
                     mainFrame.Navigate(typeof(AjouterUsager));
+                    break;
+                case "supprimerUsager":
+                    mainFrame.Navigate(typeof(SupprimerUsager));
+                    break;
+                case "modifierUsager":
+                    mainFrame.Navigate(typeof(ModifierUsager));
+                    break;
+                case "ajouterSeance":
+                    mainFrame.Navigate(typeof(AjouterSeance));
+                    break;
+                case "voirStatistique":
+                    mainFrame.Navigate(typeof(VoirStatistique));
                     break;
 
                 case "connexion":

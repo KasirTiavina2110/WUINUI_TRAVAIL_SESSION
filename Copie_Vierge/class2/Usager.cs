@@ -9,14 +9,31 @@ namespace class2
 {
     public class Usager : INotifyPropertyChanged
     {
-        private string numeroIdentification;
-        private string nom;
-        private string prenom;
-        private string adresse;
-        private DateTime dateNaissance;
-        private int age;
-        private string role;
-        private string motDePasse;
+        string numeroIdentification;
+        string nom;
+        string prenom;
+        string adresse;
+        DateTime dateNaissance;
+        int age;
+        string role;
+        string motDePasse;
+        string dateNaissance2;
+
+
+
+        public Usager() { }
+
+        public Usager(string nom, string prenom, string adresse, string datenaissance2, int age, string role, string motDePasse)
+        {
+
+            this.nom = nom;
+            this.prenom = prenom;
+            this.adresse = adresse;
+            this.dateNaissance2 = datenaissance2;
+            this.age = age;
+            this.role = role;
+            this.motDePasse = motDePasse;
+        }
 
         public string NumeroIdentification
         {
