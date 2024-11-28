@@ -28,6 +28,7 @@ namespace class2
                 case "ajouterUsager":
                     mainFrame.Navigate(typeof(AjouterUsager));
                     break;
+
                 case "connexion":
                     var modalConnexion = new ModalConnexion();
                     modalConnexion.XamlRoot = navView.XamlRoot;
