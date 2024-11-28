@@ -27,5 +27,14 @@ namespace class2
         {
             this.InitializeComponent();
         }
+
+
+
+
+
+
+
+
+
     }
 }
