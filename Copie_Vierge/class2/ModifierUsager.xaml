@@ -9,9 +9,92 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <ScrollViewer>
     <Grid>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
 
-        <TextBlock Foreground="Red">Voici la page modifier usager</TextBlock>
+            </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+
+        </Grid.ColumnDefinitions>
+        
+        <!--Première section-->
+
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <TextBlock FontSize="25" Margin="0 25 5 25" TextDecorations="Underline">Formulaire de modification d'usager</TextBlock>
+            <SymbolIcon Symbol="Setting" Margin="0 5 0 0"></SymbolIcon>
+            
+        </StackPanel>
+
+     
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 0 0 25">
+                <TextBlock x:Name="modification_reussie" Foreground="Green"></TextBlock>
+            <TextBox Header="Entrer le matricule de l'usager" Width="400" x:Name="matricule" ></TextBox>
+            <TextBlock x:Name="erreur_matricule" Foreground="Red"></TextBlock>
+
+            <Button x:Name="btn_chercher_usager" Click="btn_chercher_usager_Click"> Chercher l'usager</Button>
+
+        </StackPanel>
+
+        <!--Seconde section-->
+            
+        <StackPanel x:Name="section_nom" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin=" 0 0 0 25" Visibility="Collapsed">
+            <StackPanel Margin="0 0 20 0">
+                <TextBox PlaceholderText="Entrer le nom" x:Name="nom" Width="250"></TextBox>
+                <TextBlock x:Name="erreur_nom" Foreground="Red"></TextBlock>
+
+            </StackPanel>
+
+            <StackPanel>
+                <TextBox PlaceholderText="Prénom" x:Name="prenom" Width="250"></TextBox>
+                <TextBlock x:Name="erreur_prenom" Foreground="Red"></TextBlock>
+
+            </StackPanel>
+
+        </StackPanel>
+
+            <StackPanel x:Name="section_dateNaissance" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25" Visibility="Collapsed">
+            <DatePicker x:Name="annee_naissance" Width="400" Header="Date de naissance"></DatePicker>
+            <TextBlock x:Name="erreur_annee_naissance" Foreground="Red"></TextBlock>
+
+        </StackPanel>
+
+            <StackPanel x:Name="section_adresse" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25" Visibility="Collapsed">
+            <TextBox PlaceholderText="L'adresse de l'usager" x:Name="adresse_usager" Width="400"></TextBox>
+            <TextBlock x:Name="erreur_adresse_usager" Foreground="Red"></TextBlock>
+
+        </StackPanel>
+
+
+            <StackPanel x:Name="section_role" Grid.Row="7" Grid.ColumnSpan="2" HorizontalAlignment="Center" Visibility="Collapsed">
+            <ComboBox Header="Choississez le rôle de l'usager" x:Name="role">
+                <x:String>Admin</x:String>
+                <x:String>Adhérent</x:String>
+            </ComboBox>
+
+            <TextBlock Name="erreur_role" Foreground="Red"></TextBlock>
+        </StackPanel>
+
+            <StackPanel x:Name="section_btn_modification" Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 25 0 0" Visibility="Collapsed">
+                <Button Width="150" x:Name="bouton_modifier_usager" Click="bouton_modifier_usager_Click">Modifier</Button>
+            <TextBlock x:Name="erreur_modification" Foreground="Red"></TextBlock>
+        </StackPanel>
+
+            
+
     </Grid>
+    </ScrollViewer>
 </Page>

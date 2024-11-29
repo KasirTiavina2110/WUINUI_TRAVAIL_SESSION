@@ -25,10 +25,11 @@
                         </NavigationViewItem.MenuItems>
                     </NavigationViewItem>
                     
-                    <NavigationViewItem Content="Gestion des activités" x:Name="gestionSeances" Icon="Calendar" ToolTipService.ToolTip="Gestion des séances">
+                    <NavigationViewItem Content="Gestion des activités" x:Name="gestionSeances" Icon="Calendar" ToolTipService.ToolTip="Gestion des activités">
                         <NavigationViewItem.MenuItems>
-                            <NavigationViewItem Content="Ajouter une activité" x:Name="ajouterSeance" Icon="Add" ToolTipService.ToolTip="Ajouter une séance" />
-                            <NavigationViewItem Content="Voir les séances" x:Name="voirSeances" Icon="View" ToolTipService.ToolTip="Voir les séances" />
+                            <NavigationViewItem Content="Ajouter une activité" x:Name="ajouterActivite" Icon="Add" ToolTipService.ToolTip="Ajouter une activité" />
+                            <NavigationViewItem Content="Supprimer une activité" x:Name="supprimerActivite" Icon="Delete" ToolTipService.ToolTip="Voir les activités" />
+                            <NavigationViewItem Content="Modifier une activité" x:Name="modifierActivite" Icon="Setting" ToolTipService.ToolTip="Voir les activités" />
                         </NavigationViewItem.MenuItems>
                     </NavigationViewItem>
                     

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="class2.AjouterActivite"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:class2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <ScrollViewer>
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+
+            </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <TextBlock FontSize="25" Margin="0 25 0 25" TextDecorations="Underline">Formulaire d'ajouts d'activités</TextBlock>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+            <TextBox PlaceholderText="Exemple ID : KAYAK-NAU-010" x:Name="id_activite" Width="400" Header="Id de l'activité"></TextBox>
+            <TextBlock x:Name="erreur_id" Foreground="Red"></TextBlock>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+            <TextBox PlaceholderText="Entrer le nom" x:Name="nom" Width="400"></TextBox>
+            <TextBlock x:Name="erreur_nom" Foreground="Red"></TextBlock>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+            <TextBox PlaceholderText="Le cout de l'organisation" x:Name="cout_organisation" Width="400"></TextBox>
+            <TextBlock x:Name="erreur_cout_organisation" Foreground="Red"></TextBlock>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+            <TextBox PlaceholderText="Le prix de vente aux adhérents" x:Name="prix_vente" Width="400"></TextBox>
+            <TextBlock x:Name="erreur_prix_vente" Foreground="Red"></TextBlock>
+        </StackPanel>
+
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25">
+            <TextBox PlaceholderText="Le lien de l'image" x:Name="image" Width="400"></TextBox>
+            <TextBlock x:Name="erreur_image" Foreground="Red"></TextBlock>
+        </StackPanel>
+
+        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0 30 0 0">
+            <StackPanel Margin="0 0 110 0">
+                <ComboBox x:Name="choix_type">
+                    <x:String>Artistique</x:String>
+                    <x:String>Artisanat</x:String>
+                    <x:String>Bien-être</x:String>
+                    <x:String>Culinaire</x:String>
+                    <x:String>Scientifique</x:String>
+                    <x:String>Sportif</x:String>
+                </ComboBox>
+                <TextBlock Name="erreur_choix_type" Foreground="Red"></TextBlock>
+            </StackPanel>
+            <StackPanel>
+                <ComboBox x:Name="choix_annee">
+                    <x:String>2024</x:String>
+                    <x:String>2025</x:String>
+                    <x:String>2026</x:String>
+                </ComboBox>
+                <TextBlock Name="erreur_choix_annee" Foreground="Red"></TextBlock>
+
+
+            </StackPanel>
+  
+        </StackPanel>
+
+        <StackPanel Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 150 0 0">
+            <Button x:Name="btn_ajout_activite" Click="btn_ajout_activite_Click">Ajouter l'acitvité</Button>
+            <TextBlock x:Name="ajout_reussi" Foreground="Green"></TextBlock>
+
+        </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
+</Page>

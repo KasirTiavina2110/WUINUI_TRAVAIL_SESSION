@@ -105,7 +105,7 @@ namespace class2
                 {
                     vente_client = value;
                     OnPropertyChanged(nameof(Vente_Client));
-                    OnPropertyChanged(nameof(Vente_Client_Display)); // Notifier que Vente_Client_Display a changé
+                    OnPropertyChanged(nameof(Vente_Client_Display)); // Notifier que Display a changé
                 }
             }
 

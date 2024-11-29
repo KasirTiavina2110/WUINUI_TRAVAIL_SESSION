@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="class2.AjouterSeance"
+    x:Class="class2.ModifierActivite"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:class2"
@@ -11,8 +11,6 @@
 
     <Grid>
 
-  
-        
-      
+        <TextBlock Foreground="Red">Page modifier une activité</TextBlock>
     </Grid>
 </Page>

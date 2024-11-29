@@ -36,13 +36,18 @@ namespace class2
                 case "modifierUsager":
                     mainFrame.Navigate(typeof(ModifierUsager));
                     break;
-                case "ajouterSeance":
-                    mainFrame.Navigate(typeof(AjouterSeance));
+                case "ajouterActivite":
+                    mainFrame.Navigate(typeof(AjouterActivite));
+                    break;
+                case "supprimerActivite":
+                    mainFrame.Navigate(typeof(SupprimerActivite));
+                    break;
+                case "modifierActivite":
+                    mainFrame.Navigate(typeof(ModifierActivite));
                     break;
                 case "voirStatistique":
                     mainFrame.Navigate(typeof(VoirStatistique));
                     break;
-
                 case "connexion":
                     var modalConnexion = new ModalConnexion();
                     modalConnexion.XamlRoot = navView.XamlRoot;

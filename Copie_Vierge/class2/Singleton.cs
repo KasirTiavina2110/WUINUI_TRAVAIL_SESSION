@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using Windows.System;
 
 
 
@@ -48,9 +49,9 @@ namespace class2
             return listeActivite;
         }
 
+        //-------------------------- GESTION DES ACTIVITÉS -------------------------------------------
 
         //Aller chercher la liste des activités
-
         public void afficherActivite()
         {
             try
@@ -120,6 +121,52 @@ namespace class2
 
         }
 
+        public void ajouterActivite(Activite activite)
+        {
+            try
+            {
+                string id_activite = activite.Id;
+                string nom = activite.Nom;
+                string annee = activite.Annee;
+                double coutOrganisation = activite.Cout_Organisation;
+                double prixVente = activite.Vente_Client;
+                string type = activite.Type;
+                string pochette = activite.Pochette;
+
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "INSERT INTO activite (id_activite, nom, annee, cout_organisation, vente_client, type, pochette) " +
+                    "VALUES(@identifiant, @nom, @annee, @coutOrganisation, @prixVente, @type, @pochette)";
+                commande.Parameters.AddWithValue("@identifiant", id_activite);
+                commande.Parameters.AddWithValue("@nom", nom);
+                commande.Parameters.AddWithValue("@annee", annee);
+                commande.Parameters.AddWithValue("@coutOrganisation", coutOrganisation);
+                commande.Parameters.AddWithValue("@prixVente", prixVente);
+                commande.Parameters.AddWithValue("@type", type);
+                commande.Parameters.AddWithValue("@pochette", pochette);
+
+                con.Open();
+                commande.Prepare();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open) //Pour vérifier que la connexion est ouverte, sinon ca va planter
+                {
+                    con.Close();
+                }
+
+
+            }
+
+        }
+
+
+
+        // ------------------------- GESTION USAGERS ---------------------------------------------------------
 
         //Ajouter un usager
         public void ajouterUsager(Usager usager)
@@ -184,6 +231,99 @@ namespace class2
             con.Close();
 
             return i;
+
+        }
+
+        //Vérifier si un matricule return 1 ou 0
+        public int verifierSiExiste(string matricule)
+        {
+            string numero_identification = matricule;
+
+            MySqlCommand commande = new MySqlCommand();
+
+            commande.Connection = con;
+            commande.CommandText = "SELECT COUNT(*) FROM adherent WHERE numero_identification = @matricule";
+            commande.Parameters.AddWithValue("@matricule", numero_identification);
+
+            con.Open();
+
+            //Permet de retourner la valeur du COUNT(*)
+            int i = Convert.ToInt32(commande.ExecuteScalar());
+
+            con.Close();
+
+            return i;
+
+        }
+
+
+        //Aller chercher les informations d'un usager (page modification)
+        public Usager informationUnUsager(string matricule)
+        {
+
+            Usager utilisateur = null;
+
+            string numero_identification = matricule;
+
+            MySqlCommand commande = new MySqlCommand();
+
+            commande.Connection = con;
+            commande.CommandText = "SELECT * FROM adherent WHERE numero_identification = @matricule";
+            commande.Parameters.AddWithValue("@matricule", numero_identification);
+
+            con.Open();
+
+            MySqlDataReader reader = commande.ExecuteReader();
+
+            //Retourner un usager pour avoir accès aux infos selon ce qu'on veut afficher
+            while (reader.Read())
+            {
+                utilisateur = new Usager()
+                {
+                    Nom = reader["nom"].ToString(),
+                    Prenom = reader["prenom"].ToString(),
+                    Adresse = reader["adresse"].ToString(),
+                    DateNaissance = Convert.ToDateTime(reader["date_naissance"]),
+                    Age = Convert.ToInt32(reader["age"]),
+                    Role = reader["role"].ToString(),
+                    MotDePasse = reader["mot_de_passe"].ToString()
+                };
+
+
+            }
+
+            reader.Close();
+            con.Close();
+
+            return utilisateur;
+
+        }
+
+        //Pour modifier un usager
+        public bool modifierUsager(Usager usager)
+        {
+
+            MySqlCommand commande = new MySqlCommand();
+
+            commande.Connection = con; 
+            commande.CommandText = "UPDATE adherent " +
+                "SET nom = @nom, prenom = @prenom, adresse = @adresse, date_naissance = @dateNaissance, age = @age, role = @role " +
+                " WHERE numero_identification = @matricule";
+            commande.Parameters.AddWithValue("@matricule", usager.NumeroIdentification);
+            commande.Parameters.AddWithValue("@nom", usager.Nom);
+            commande.Parameters.AddWithValue("@prenom", usager.Prenom);
+            commande.Parameters.AddWithValue("@adresse", usager.Adresse);
+            commande.Parameters.AddWithValue("@dateNaissance", usager.DateNaissance2);
+            commande.Parameters.AddWithValue("@age", usager.Age);
+            commande.Parameters.AddWithValue("@role", usager.Role);
+
+
+            con.Open();
+            commande.Prepare();
+            int i = commande.ExecuteNonQuery();
+            con.Close();
+
+            return i > 0;
 
         }
 

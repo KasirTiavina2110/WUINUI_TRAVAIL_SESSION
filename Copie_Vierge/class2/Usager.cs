@@ -23,6 +23,8 @@ namespace class2
 
         public Usager() { }
 
+
+        //Constructeur pour ajout d'un usager
         public Usager(string nom, string prenom, string adresse, string datenaissance2, int age, string role, string motDePasse)
         {
 
@@ -34,6 +36,22 @@ namespace class2
             this.role = role;
             this.motDePasse = motDePasse;
         }
+
+        //Constructeur pour modification d'un Usager
+        public Usager(string numeroIdentification, string nom, string prenom, string adresse, string datenaissance2, int age, string role)
+        {
+            this.numeroIdentification = numeroIdentification;
+            this.nom = nom;
+            this.prenom = prenom;
+            this.adresse = adresse;
+            this.dateNaissance2 = datenaissance2;
+            this.age = age;
+            this.role = role;
+        }
+
+
+
+
 
         public string NumeroIdentification
         {
