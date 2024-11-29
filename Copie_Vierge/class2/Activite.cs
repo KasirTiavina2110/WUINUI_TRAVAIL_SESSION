@@ -8,14 +8,14 @@ using Windows.UI.Notifications;
 
 namespace class2
 {
-    internal class Activite : INotifyPropertyChanged
+    public class Activite : INotifyPropertyChanged
     {
 
-        string id, nom, annee, type;
+        string id, nom, annee, type, pochette;
         double cout_organisation, vente_client;
 
 
-        public Activite(string id, string nom, string annee, string type, double cout_organisation, double vente_client)
+        public Activite(string id, string nom, string annee, double cout_organisation, double vente_client, string type, string pochette )
         {
             this.id = id;
             this.nom = nom;
@@ -23,6 +23,7 @@ namespace class2
             this.type = type;
             this.cout_organisation = cout_organisation;
             this.vente_client = vente_client;
+            this.pochette = pochette;
         }
 
         public string Id
@@ -104,6 +105,26 @@ namespace class2
                 {
                     vente_client = value;
                     OnPropertyChanged(nameof(Vente_Client));
+                    OnPropertyChanged(nameof(Vente_Client_Display)); // Notifier que Vente_Client_Display a changé
+                }
+            }
+
+        }
+        public string Vente_Client_Display
+        {
+            get { return $"${Vente_Client}"; }
+        }
+
+
+        public string Pochette
+        {
+            get { return pochette; }
+            set
+            {
+                if (pochette != value)
+                {
+                    pochette = value;
+                    OnPropertyChanged(nameof(Pochette));
                 }
             }
 

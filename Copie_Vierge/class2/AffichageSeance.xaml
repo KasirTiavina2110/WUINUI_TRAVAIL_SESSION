@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="class2.AffichageSeance"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,57 +8,48 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <ScrollViewer>
-        <Grid>
+    <Grid>
+        <!-- GridView pour afficher les activités -->
+        <GridView x:Name="ActivitiesGridView"
+                  ItemsSource="{x:Bind ActivitiesList}"
+                  IsItemClickEnabled="True"
+                  SelectionMode="None"
+                  Margin="10"
+                  ItemClick="ActivitiesGridView_ItemClick">
+            <!-- Définition du modèle d'élément -->
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="local:Activite">
+                    <Grid Width="200" Height="250">
+                        <!-- Image de l'activité -->
+                        <Image Stretch="UniformToFill">
+                            <Image.Source>
+                                <BitmapImage UriSource="{x:Bind Pochette}" CreateOptions="IgnoreImageCache"/>
+                            </Image.Source>
+                        </Image>
+                        <!-- Superposition avec les détails de l'activité -->
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Background="#80000000" Padding="5">
+                            <TextBlock Text="{x:Bind Id}" Foreground="White" FontWeight="Bold"/>
+                            <TextBlock Text="{x:Bind Type}" Foreground="White"/>
+                            <TextBlock Text="{x:Bind Vente_Client_Display}" Foreground="White" TextWrapping="Wrap"/>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
 
-            </Grid.RowDefinitions>
+            <!-- Style pour les éléments du GridView -->
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="Margin" Value="10"/>
+                </Style>
+            </GridView.ItemContainerStyle>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-
-            </Grid.ColumnDefinitions>
-
-            <StackPanel x:Name="titreListe" Visibility="Visible" Grid.Row="2" Grid.ColumnSpan="2">
-                <ListView x:Name="voirListe" Visibility="Visible">
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <ItemsWrapGrid Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="local:Activite">
-                            <StackPanel Width="500" Height="50" Margin="5">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                                Margin="5">
-
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock x:Name="nomProduit" Text="{x:Bind Id, Mode=OneWay}" Margin="5,5,5,10"/>
-                                        <TextBlock Text="-" Margin="5,5,5,10"/>
-                                        <TextBlock x:Name="prixProduit" Text="{x:Bind Nom, Mode=OneWay}" Margin="5,5,5,10"/>
-                                        <TextBlock Text= "-" Margin="5,5,5,10"/>
-                                        <TextBlock x:Name="descriptionProduit" Text="{x:Bind Annee , Mode=OneWay}" Margin="5,5,5,10"/>
-                                        <TextBlock Text= "-" Margin="5,5,5,10"/>
-                                        <TextBlock x:Name="frwfrew" Text="{x:Bind Type , Mode=OneWay}" Margin="5,5,5,10"/>
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <Button x:Name="Delete" Click="Delete_Click"  Margin="20 0 0 0">
-                                            <SymbolIcon Symbol="Delete"/>
-                                        </Button>
-                                    </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-
-            </StackPanel>
-
-        </Grid>
-    </ScrollViewer>
+            <!-- Configuration du panneau d'items -->
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="4"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+        </GridView>
+    </Grid>
 </Page>

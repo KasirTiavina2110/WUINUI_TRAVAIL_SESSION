@@ -71,8 +71,9 @@ namespace class2
                     double cout_organisation = Double.Parse(reader[3].ToString());
                     double vente_client = Double.Parse(reader[4].ToString());
                     string type = reader[5].ToString();
+                    string pochette = reader[6].ToString();
 
-                    Activite activite = new Activite(id,nom, annee, type, cout_organisation, vente_client);
+                    Activite activite = new Activite(id,nom,annee,cout_organisation,vente_client,type,pochette);
                     listeActivite.Add(activite);
 
                 }

@@ -6,62 +6,75 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace class2
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class AffichageSeance : Page, INotifyPropertyChanged
     {
+        private ObservableCollection<Activite> _activitiesList;
+        public ObservableCollection<Activite> ActivitiesList
+        {
+            get { return _activitiesList; }
+            set
+            {
+                _activitiesList = value;
+                OnPropertyChanged(nameof(ActivitiesList));
+            }
+        }
+
         public AffichageSeance()
         {
             this.InitializeComponent();
+            ActivitiesList = Singleton.getInstance().getListeActivite();
+        }
 
-            voirListe.ItemsSource = Singleton.getInstance().getListeActivite();
+        private void ActivitiesGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var selectedActivity = e.ClickedItem as Activite;
+            var currentUser = SessionManager.Instance.UsagerConnecte;
 
+            if (currentUser != null)
+            {
+                if (currentUser.Role == "admin")
+                {
+                    // Naviguer vers la page de modification de l'activité
+                    this.Frame.Navigate(typeof(ModifierActivitePage), selectedActivity);
+                }
+                else if (currentUser.Role == "adherent")
+                {
+                    // Naviguer vers la page d'inscription à une séance
+                    this.Frame.Navigate(typeof(DetailsActivitePage), selectedActivity);
+                }
+            }
+            else
+            {
+                // Aucun utilisateur connecté, rediriger vers la page de connexion ou afficher un message
+                ContentDialog noUserDialog = new ContentDialog()
+                {
+                    Title = "Utilisateur non connecté",
+                    Content = "Veuillez vous connecter pour continuer.",
+                    CloseButtonText = "OK"
+                };
+                _ = noUserDialog.ShowAsync();
+            }
         }
 
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-
             Activite activite = button.DataContext as Activite;
-
             Singleton.getInstance().supprimerActivite(activite);
-
-
         }
 
-
-
-
-
-
-
-
-
-
-
-        //----------------- Ne pas oublier pour rendre le changement dynamique-------------------------
+        // Implémentation de INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
-
-        protected void OnPropertyChanged(string propertyName) /*Important de ne pas oublier ca */
+        private void OnPropertyChanged(string propertyName) /*Important de ne pas oublier ça*/
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

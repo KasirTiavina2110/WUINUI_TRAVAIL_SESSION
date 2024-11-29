@@ -15,7 +15,9 @@
     <None Remove="AffichageSeance.xaml" />
     <None Remove="AjouterSeance.xaml" />
     <None Remove="AjouterUsager.xaml" />
+    <None Remove="DetailsActivitePage.xaml" />
     <None Remove="ModalConnexion.xaml" />
+    <None Remove="ModifierActivitePage.xaml" />
     <None Remove="ModifierUsager.xaml" />
     <None Remove="SupprimerUsager.xaml" />
     <None Remove="VoirStatistique.xaml" />
@@ -46,6 +48,16 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="DetailsActivitePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ModifierActivitePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="ModalConnexion.xaml">
