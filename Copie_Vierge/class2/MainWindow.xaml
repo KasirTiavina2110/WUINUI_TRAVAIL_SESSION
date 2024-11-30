@@ -10,7 +10,7 @@
 
     <NavigationView PaneDisplayMode="Left" PaneTitle="Gestion des activités" x:Name="navView"
                 IsSettingsVisible="False" IsBackButtonVisible="Collapsed"
-                SelectionChanged="navView_SelectionChanged">
+                ItemInvoked="navView_ItemInvoked">
 
         <NavigationView.MenuItems>
             <NavigationViewItem Content="Voir activités" x:Name="voirActivite" Icon="Home" ToolTipService.ToolTip="Liste des activités" />

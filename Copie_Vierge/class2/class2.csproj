@@ -12,7 +12,7 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="AffichageSeance.xaml" />
+    <None Remove="AffichageActivite.xaml" />
     <None Remove="AjouterActivite.xaml" />
     <None Remove="AjouterSeance.xaml" />
     <None Remove="AjouterUsager.xaml" />
@@ -108,7 +108,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="AffichageSeance.xaml">
+    <Page Update="AffichageActivite.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

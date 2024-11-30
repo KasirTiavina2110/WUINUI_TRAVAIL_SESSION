@@ -10,62 +10,64 @@ namespace class2
         {
             this.InitializeComponent();
             // Page par défaut affichée
-            mainFrame.Navigate(typeof(AffichageSeance));
+            mainFrame.Navigate(typeof(AffichageActivite));
 
             // Masque les options administratives au démarrage
             adminSection.Visibility = Visibility.Collapsed;
         }
 
-        private async void navView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private async void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            var item = args.SelectedItem as NavigationViewItem;
+            var invokedItem = args.InvokedItemContainer as NavigationViewItem;
 
-
-            // ------------------------------------ Manque peut-être une page pour voir les séances--------------------------------------------
-            switch (item.Name)
+            if (invokedItem != null)
             {
-                case "voirActivite":
-                    mainFrame.Navigate(typeof(AffichageSeance));
-                    break;
-                case "ajouterUsager":
-                    mainFrame.Navigate(typeof(AjouterUsager));
-                    break;
-                case "supprimerUsager":
-                    mainFrame.Navigate(typeof(SupprimerUsager));
-                    break;
-                case "modifierUsager":
-                    mainFrame.Navigate(typeof(ModifierUsager));
-                    break;
-                case "ajouterActivite":
-                    mainFrame.Navigate(typeof(AjouterActivite));
-                    break;
-                case "supprimerActivite":
-                    mainFrame.Navigate(typeof(SupprimerActivite));
-                    break;
-                case "modifierActivite":
-                    mainFrame.Navigate(typeof(ModifierActivite));
-                    break;
-                case "voirStatistique":
-                    mainFrame.Navigate(typeof(VoirStatistique));
-                    break;
-                case "connexion":
-                    var modalConnexion = new ModalConnexion();
-                    modalConnexion.XamlRoot = navView.XamlRoot;
-                    await modalConnexion.ShowAsync();
+                switch (invokedItem.Name)
+                {
+                    case "voirActivite":
+                        mainFrame.Navigate(typeof(AffichageActivite));
+                        break;
+                    case "ajouterUsager":
+                        mainFrame.Navigate(typeof(AjouterUsager));
+                        break;
+                    case "supprimerUsager":
+                        mainFrame.Navigate(typeof(SupprimerUsager));
+                        break;
+                    case "modifierUsager":
+                        mainFrame.Navigate(typeof(ModifierUsager));
+                        break;
+                    case "ajouterActivite":
+                        mainFrame.Navigate(typeof(AjouterActivite));
+                        break;
+                    case "supprimerActivite":
+                        mainFrame.Navigate(typeof(SupprimerActivite));
+                        break;
+                    case "modifierActivite":
+                        mainFrame.Navigate(typeof(ModifierActivite));
+                        break;
+                    case "voirStatistique":
+                        mainFrame.Navigate(typeof(VoirStatistique));
+                        break;
+                    case "connexion":
+                        var modalConnexion = new ModalConnexion();
+                        modalConnexion.XamlRoot = navView.XamlRoot;
+                        await modalConnexion.ShowAsync();
 
-                    // Redirection après connexion
-                    if (SessionManager.Instance.UsagerConnecte != null)
-                    {
-                        RedirigerSelonRole();
-                    }
-                    break;
-                case "deconnexion":
-                    DeconnecterUsager();
-                    break;
-                default:
-                    break;
+                        // Redirection après connexion
+                        if (SessionManager.Instance.UsagerConnecte != null)
+                        {
+                            RedirigerSelonRole();
+                        }
+                        break;
+                    case "deconnexion":
+                        DeconnecterUsager();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
+
 
         private void RedirigerSelonRole()
         {
@@ -78,7 +80,7 @@ namespace class2
             }
             else if (usager.Role == "adherent")
             {
-                mainFrame.Navigate(typeof(AffichageSeance));
+                mainFrame.Navigate(typeof(AffichageActivite));
                 adminSection.Visibility = Visibility.Collapsed; // Cache les options admin
             }
         }
@@ -104,7 +106,7 @@ namespace class2
             SessionManager.Instance.DeconnecterUsager();
 
             // Retourne à la page d'accueil
-            mainFrame.Navigate(typeof(AffichageSeance));
+            mainFrame.Navigate(typeof(AffichageActivite));
 
             // Cache les options administratives
             adminSection.Visibility = Visibility.Collapsed;

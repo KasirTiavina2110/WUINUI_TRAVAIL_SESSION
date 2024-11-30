@@ -11,7 +11,7 @@ using System.ComponentModel;
 
 namespace class2
 {
-    public sealed partial class AffichageSeance : Page, INotifyPropertyChanged
+    public sealed partial class AffichageActivite : Page, INotifyPropertyChanged
     {
         private ObservableCollection<Activite> _activitiesList;
         public ObservableCollection<Activite> ActivitiesList
@@ -24,7 +24,7 @@ namespace class2
             }
         }
 
-        public AffichageSeance()
+        public AffichageActivite()
         {
             this.InitializeComponent();
             ActivitiesList = Singleton.getInstance().getListeActivite();
@@ -53,6 +53,7 @@ namespace class2
                 // Aucun utilisateur connecté, rediriger vers la page de connexion ou afficher un message
                 ContentDialog noUserDialog = new ContentDialog()
                 {
+                    XamlRoot = this.XamlRoot,
                     Title = "Utilisateur non connecté",
                     Content = "Veuillez vous connecter pour continuer.",
                     CloseButtonText = "OK"
