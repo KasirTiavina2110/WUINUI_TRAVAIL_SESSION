@@ -6,9 +6,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    RequestedTheme="Dark"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Grid Padding="40" x:Name="mainGrid">
+            <Grid.Background>
+                <ImageBrush ImageSource="https://c8.alamy.com/compfr/fxac1x/l-activite-physique-noir-icones-fxac1x.jpg"
+                            Stretch="UniformToFill"
+                            Opacity="0.5" />
+            </Grid.Background>
+        </Grid>
         <!-- GridView pour afficher les activités -->
         <GridView x:Name="ActivitiesGridView"
                   ItemsSource="{x:Bind ActivitiesList}"
@@ -19,21 +27,38 @@
             <!-- Définition du modèle d'élément -->
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="local:Activite">
-                    <Grid Width="200" Height="250">
-                        <!-- Image de l'activité -->
-                        <Image Stretch="UniformToFill">
-                            <Image.Source>
-                                <BitmapImage UriSource="{x:Bind Pochette}" CreateOptions="IgnoreImageCache"/>
-                            </Image.Source>
-                        </Image>
-                        <!-- Superposition avec les détails de l'activité -->
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Background="#80000000" Padding="5">
-                            <TextBlock Text="{x:Bind Id}" Foreground="White" FontWeight="Bold"/>
-                            <TextBlock Text="{x:Bind Type}" Foreground="White" FontStyle="Italic"/>
-                            <TextBlock Text="{x:Bind Vente_Client_Display}" Foreground="White" FontWeight="ExtraBold" TextWrapping="Wrap"/>
+                    <!-- Utilisation du Viewbox pour gérer la taille -->
+                    <Viewbox Stretch="Uniform">
+                        <Grid Width="175" Height="150">
+                            <!-- Border avec coins arrondis autour de l'image -->
+                            <Border CornerRadius="10"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0">
+                                <Image Stretch="UniformToFill">
+                                    <Image.Source>
+                                        <BitmapImage UriSource="{x:Bind Pochette}" CreateOptions="IgnoreImageCache"/>
+                                    </Image.Source>
+                                </Image>
+                            </Border>
 
-                        </StackPanel>
-                    </Grid>
+                            <!-- Superposition avec les détails de l'activité -->
+                            <StackPanel Orientation="Vertical"
+                                        VerticalAlignment="Bottom"
+                                        Background="#80000000"
+                                        Padding="5">
+                                <TextBlock Text="{x:Bind Id}"
+                                           Foreground="White"
+                                           FontWeight="Bold"/>
+                                <TextBlock Text="{x:Bind Type}"
+                                           Foreground="White"
+                                           FontStyle="Italic"/>
+                                <TextBlock Text="{x:Bind Vente_Client_Display}"
+                                           Foreground="White"
+                                           FontWeight="ExtraBold"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Grid>
+                    </Viewbox>
                 </DataTemplate>
             </GridView.ItemTemplate>
 
@@ -44,10 +69,12 @@
                 </Style>
             </GridView.ItemContainerStyle>
 
-            <!-- Configuration du panneau d'items -->
+            <!-- Configuration du panneau d'items avec ItemWidth et ItemHeight -->
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="4"/>
+                    <ItemsWrapGrid Orientation="Horizontal"
+                                   ItemWidth="210"
+                                   ItemHeight="260"/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
         </GridView>
