@@ -9,7 +9,69 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <ScrollViewer>
     <Grid>
-        <TextBlock Foreground="Red">Voici la page des statistiques</TextBlock>
-    </Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+
+        </Grid.ColumnDefinitions>
+
+
+        <!--Nombre total d'adhérent-->
+        <StackPanel Grid.ColumnSpan="3" Background="Gray">
+            <TextBlock HorizontalAlignment="Center" Margin="0 10 0 0" FontWeight="Bold" TextDecorations="Underline" FontSize="25">Statistiques sur les adhérents</TextBlock>
+            <TextBlock x:Name="nombreTotalAdherents" Text="Nombre total d'adhérents : " HorizontalAlignment="Center" Margin="0 10 0 20"></TextBlock>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="3">
+            <TextBlock HorizontalAlignment="Center" Margin="0 10 0 0" FontWeight="Bold" TextDecorations="Underline" FontSize="25">Le nombre total d'activités</TextBlock>
+            <TextBlock x:Name="nombreTotalActivite" Text="Nombre total d'activités " HorizontalAlignment="Center" Margin="0 10 0 20"></TextBlock>
+        </StackPanel>
+
+        <!--Nombre total d'adhérents par séance-->
+        <StackPanel x:Name="stk_parent" Grid.Row="2" Grid.ColumnSpan="3" Background="Gray">
+
+
+        </StackPanel>
+        
+        <!--Activité la plus fréquentée-->
+        <StackPanel x:Name="stk_seance_plus_frenquentee_parent" Grid.Row="3" Grid.ColumnSpan="3" >
+            <TextBlock HorizontalAlignment="Center" Margin="0 10 0 0" FontWeight="Bold" TextDecorations="Underline" FontSize="25">Activité la plus fréquentée</TextBlock>
+            <TextBlock x:Name="activitePlusPopulaire" HorizontalAlignment="Center" Margin="0 10 0 20"></TextBlock>
+        </StackPanel>
+
+
+        <!--Moyenne note-->
+            <StackPanel x:Name="stk_note_parent" Grid.Row="4" Grid.ColumnSpan="3"  Background="Gray">
+    
+        </StackPanel>
+
+        <!--Nombre inscription par type-->
+        <StackPanel x:Name="stk_type_parent" Grid.Row="5" Grid.ColumnSpan="3">
+
+         </StackPanel>
+
+        <!--Age moyen adhérent-->
+            <StackPanel x:Name="stk_age_parent" Grid.Row="6" Grid.ColumnSpan="3"  Background="Gray">
+            <TextBlock HorizontalAlignment="Center" Margin="0 10 0 0" FontWeight="Bold" TextDecorations="Underline" FontSize="25">Âge moyen</TextBlock>
+            <TextBlock x:Name="AgeMoyen" Text="Âge moyen des adhérents : " HorizontalAlignment="Center" Margin="0 10 0 20"></TextBlock>
+
+        </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
 </Page>
