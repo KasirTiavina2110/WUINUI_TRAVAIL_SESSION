@@ -91,36 +91,116 @@ namespace class2
         //Supprimer une activité, RESTE VÉRIFIER POUR ÊTRE SÛR QUE CA FONCTIONNE
         //J'attend l'ajout d'activité pour tester
 
-        public void supprimerActivite(Activite activite)
+        public int supprimerActivite(string identifiant)
         {
+            string id_activite = identifiant;
 
-            try
+            //Compter si des séances existent
+            int reponseRequete = compterSeance(id_activite);
+
+            if(reponseRequete > 0)
             {
-                MySqlCommand commande = new MySqlCommand();
-                commande.Connection = con;
-                commande.CommandText = "DELETE FROM activite WHERE id_activite = @activite";
-                commande.Parameters.AddWithValue("@activite", activite.Id);
-
-                con.Open();
-                int i = commande.ExecuteNonQuery();
-                con.Close();
-
-                if (i > 0)
-                {
-                    // Suppression réussie dans la base de données, maintenant on enlève de la collection
-                    listeActivite.Remove(activite);
-                }
+                return -1;
             }
-            catch
-            {
-                if (con.State == System.Data.ConnectionState.Open) //Pour vérifier que la connexion est ouverte, sinon ca va planter
-                {
-                    con.Close();
-                }
-            }
+
+            MySqlCommand commande = new MySqlCommand();
+            commande.Connection = con;
+            commande.CommandText = "DELETE FROM activite WHERE id_activite = @activite";
+            commande.Parameters.AddWithValue("@activite", id_activite);
+
+            con.Open();
+            commande.Prepare();
+            int i = commande.ExecuteNonQuery();
+            con.Close();
+
+            return i;
+
+
+        }
+        //Supprimer les séances en rapport avec l'acitivité supprimée
+        public int compterSeance(string identifiant)
+        {
+            string numero_activite = identifiant;
+
+            MySqlCommand commande = new MySqlCommand();
+            commande.Connection = con;
+            commande.CommandText = "SELECT COUNT(*) FROM seance WHERE numero_activite= @activite";
+            commande.Parameters.AddWithValue("@activite", numero_activite);
+
+            con.Open();
+            commande.Prepare();
+            int i = Convert.ToInt32(commande.ExecuteScalar());
+            con.Close();
+
+            return i;
+
 
         }
 
+        //Vérifier si une activité existe, return 1 ou 0
+        public int verifierSiActiviteExiste(string identifiant)
+        {
+            string id_activite = identifiant;
+
+            MySqlCommand commande = new MySqlCommand();
+
+            commande.Connection = con;
+            commande.CommandText = "SELECT COUNT(*) FROM activite WHERE id_activite = @activite";
+            commande.Parameters.AddWithValue("@activite", id_activite);
+
+            con.Open();
+            commande.Prepare();
+            //Permet de retourner la valeur du COUNT(*)
+            int i = Convert.ToInt32(commande.ExecuteScalar());
+
+            con.Close();
+
+            return i;
+
+        }
+
+        //Aller chercher les informations d'une activité
+        public Activite informationUneActivite(string nom_activite)
+        {
+            Activite activite = null;
+
+            string id_activite = nom_activite;
+
+            MySqlCommand commande = new MySqlCommand();
+
+            commande.Connection = con;
+            commande.CommandText = "SELECT * FROM activite WHERE id_activite = @id";
+            commande.Parameters.AddWithValue("@id", id_activite);
+
+            con.Open();
+
+            MySqlDataReader reader = commande.ExecuteReader();
+
+            //Retourner une activite pour avoir accès aux infos selon ce qu'on veut afficher
+            while (reader.Read())
+            {
+                activite = new Activite()
+                {
+                    Nom = reader["nom"].ToString(),
+                    Annee = reader["annee"].ToString(),
+                    Cout_Organisation = Convert.ToDouble(reader["cout_organisation"]),
+                    Vente_Client = Convert.ToDouble(reader["vente_client"]),
+                    Type = reader["type"].ToString(),
+                    Pochette = reader["pochette"].ToString(),
+
+                };
+
+
+            }
+
+            reader.Close();
+            con.Close();
+
+            return activite;
+
+        }
+
+        //Ajouter une activité
         public void ajouterActivite(Activite activite)
         {
             try
@@ -225,7 +305,7 @@ namespace class2
             commande.Parameters.AddWithValue("@matricule", numero_identifiaction);
 
             con.Open();
-
+            commande.Prepare();
             int i = commande.ExecuteNonQuery();
 
             con.Close();
@@ -246,7 +326,7 @@ namespace class2
             commande.Parameters.AddWithValue("@matricule", numero_identification);
 
             con.Open();
-
+            commande.Prepare();
             //Permet de retourner la valeur du COUNT(*)
             int i = Convert.ToInt32(commande.ExecuteScalar());
 

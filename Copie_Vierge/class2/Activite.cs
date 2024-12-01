@@ -14,7 +14,7 @@ namespace class2
         string id, nom, annee, type, pochette;
         double cout_organisation, vente_client;
 
-
+        public Activite() { }
         public Activite(string id, string nom, string annee, double cout_organisation, double vente_client, string type, string pochette )
         {
             this.id = id;

@@ -9,8 +9,83 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Foreground="Red">Page modifier une activité</TextBlock>
-    </Grid>
+            <!-- Première section -->
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock FontSize="25" Margin="0 25 5 25" TextDecorations="Underline">Formulaire de modification d'une activité</TextBlock>
+                    <SymbolIcon Symbol="Setting" Margin="0 5 0 0"></SymbolIcon>
+                </StackPanel>
+
+                <StackPanel HorizontalAlignment="Center" Margin="0 0 0 25">
+                    <TextBlock x:Name="modification_reussie" Foreground="Green" />
+                    <TextBox Header="Entrer l'id de l'activité" Width="400" x:Name="id_activite" />
+                    <TextBlock x:Name="erreur_id_activite" Foreground="Red" />
+                    <Button x:Name="btn_chercher_activite" Click="btn_chercher_activite_Click">Chercher l'activité</Button>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Seconde section -->
+            <StackPanel x:Name="secondeSection" Grid.Row="1" Grid.ColumnSpan="2" Visibility="Collapsed">
+                <StackPanel x:Name="section_nom" HorizontalAlignment="Center" Margin="0 0 0 25">
+                    <TextBox PlaceholderText="Entrer le nom" x:Name="nom" Width="400" />
+                    <TextBlock x:Name="erreur_nom" Foreground="Red" />
+                </StackPanel>
+                <StackPanel x:Name="section_cout_organisation" HorizontalAlignment="Center" Margin="0 0 0 25">
+                    <TextBox PlaceholderText="Le cout de l'organisation" x:Name="cout_organisation" Width="400" />
+                    <TextBlock x:Name="erreur_cout_organisation" Foreground="Red" />
+                </StackPanel>
+                <StackPanel x:Name="section_prix_vente" HorizontalAlignment="Center" Margin="0 0 0 25">
+                    <TextBox PlaceholderText="Le prix de vente aux adhérents" x:Name="prix_vente" Width="400" />
+                    <TextBlock x:Name="erreur_prix_vente" Foreground="Red" />
+                </StackPanel>
+                <StackPanel x:Name="section_image" HorizontalAlignment="Center" Margin="0 0 0 25">
+                    <TextBox PlaceholderText="Le lien de l'image" x:Name="image" Width="400" />
+                    <TextBlock x:Name="erreur_image" Foreground="Red" />
+                </StackPanel>
+                <StackPanel x:Name="choix" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0 30 0 0">
+                    <StackPanel Margin="0 0 110 0">
+                        <ComboBox x:Name="choix_type">
+                            <x:String>Artistique</x:String>
+                            <x:String>Artisanat</x:String>
+                            <x:String>Bien-être</x:String>
+                            <x:String>Culinaire</x:String>
+                            <x:String>Scientifique</x:String>
+                            <x:String>Sportif</x:String>
+                        </ComboBox>
+                        <TextBlock Name="erreur_choix_type" Foreground="Red" />
+                    </StackPanel>
+                    <StackPanel>
+                        <ComboBox x:Name="choix_annee">
+                            <x:String>2024</x:String>
+                            <x:String>2025</x:String>
+                            <x:String>2026</x:String>
+                        </ComboBox>
+                        <TextBlock Name="erreur_choix_annee" Foreground="Red" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel x:Name="container_button" HorizontalAlignment="Center" Margin="0 50 0 30">
+                    <Button>Modifier</Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+
 </Page>

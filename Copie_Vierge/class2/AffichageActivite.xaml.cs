@@ -63,13 +63,6 @@ namespace class2
         }
 
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            Activite activite = button.DataContext as Activite;
-            Singleton.getInstance().supprimerActivite(activite);
-        }
-
         // Implémentation de INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
