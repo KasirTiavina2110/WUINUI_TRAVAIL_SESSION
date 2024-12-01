@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -128,6 +129,14 @@ namespace class2
                 }
             }
 
+        }
+
+        public string ExportationCSV
+        {
+            get
+            {
+                return $"{Id} - {Nom} - {Annee} - Cout_Orga : {Cout_Organisation}$ - Vente : {Vente_Client}$ - {Type} ";
+            }
         }
 
         public override string ToString()

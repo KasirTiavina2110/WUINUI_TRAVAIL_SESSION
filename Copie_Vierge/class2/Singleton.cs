@@ -8,6 +8,7 @@ using MySql.Data.MySqlClient;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using Windows.System;
+using System.Data;
 
 
 
@@ -18,6 +19,7 @@ namespace class2
 
         MySqlConnection con;
         ObservableCollection<Activite> listeActivite;
+        ObservableCollection<Usager> listeUsager;
    
         public static Singleton instance = null;
 
@@ -48,6 +50,51 @@ namespace class2
             afficherActivite();
             return listeActivite;
         }
+
+        //Recevoir la liste des utilisateurs
+        public ObservableCollection<Usager> GetListeAdherents()
+        {
+            ObservableCollection<Usager> listeAdherents = new ObservableCollection<Usager>();
+
+            try
+            {
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "SELECT * FROM adherent WHERE role = 'adherent'";
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Usager usager = new Usager
+                    {
+                        NumeroIdentification = reader["numero_identification"].ToString(),
+                        Nom = reader["Nom"].ToString(),
+                        Prenom = reader["Prenom"].ToString(),
+                        Age = Convert.ToInt32(reader["age"])
+                    };
+
+                    listeAdherents.Add(usager);
+                }
+
+                reader.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                // Gérez les exceptions ici
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+
+            return listeAdherents;
+        }
+
+
+
 
         //-------------------------- GESTION DES ACTIVITÉS -------------------------------------------
 
@@ -453,7 +500,6 @@ namespace class2
             return i > 0;
 
         }
-
 
 
     }
