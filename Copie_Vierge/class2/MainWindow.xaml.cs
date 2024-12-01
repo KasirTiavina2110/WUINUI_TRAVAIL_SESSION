@@ -4,7 +4,7 @@ using System;
 
 namespace class2
 {
-    public sealed partial class MainWindow : Window
+    public sealed partial class MainWindow // Retirer ': Window' ici
     {
         public MainWindow()
         {
@@ -27,6 +27,9 @@ namespace class2
                     case "voirActivite":
                         mainFrame.Navigate(typeof(AffichageActivite));
                         break;
+                    case "voirSeance":
+                        mainFrame.Navigate(typeof(AffichageSeance));
+                        break;
                     case "ajouterUsager":
                         mainFrame.Navigate(typeof(AjouterUsager));
                         break;
@@ -45,6 +48,15 @@ namespace class2
                     case "modifierActivite":
                         mainFrame.Navigate(typeof(ModifierActivite));
                         break;
+                    case "ajouterSeance":
+                        mainFrame.Navigate(typeof(AjouterSeance));
+                        break;
+                    case "supprimerSeance":
+                        mainFrame.Navigate(typeof(SupprimerSeance));
+                        break;
+                    case "modifierSeance":
+                        mainFrame.Navigate(typeof(ModifierSeance));
+                        break;
                     case "voirStatistique":
                         mainFrame.Navigate(typeof(VoirStatistique));
                         break;
@@ -60,14 +72,13 @@ namespace class2
                         }
                         break;
                     case "deconnexion":
-                        DeconnecterUsager();
+                        await DeconnecterUsager();
                         break;
                     default:
                         break;
                 }
             }
         }
-
 
         private void RedirigerSelonRole()
         {
@@ -85,7 +96,7 @@ namespace class2
             }
         }
 
-        private void DeconnecterUsager()
+        private async System.Threading.Tasks.Task DeconnecterUsager()
         {
             // Vérifie si aucun utilisateur n'est connecté
             if (SessionManager.Instance.UsagerConnecte == null)
@@ -98,7 +109,7 @@ namespace class2
                     CloseButtonText = "OK",
                     XamlRoot = navView.XamlRoot
                 };
-                _ = dialog.ShowAsync();
+                await dialog.ShowAsync();
                 return;
             }
 
@@ -119,8 +130,7 @@ namespace class2
                 CloseButtonText = "OK",
                 XamlRoot = navView.XamlRoot
             };
-            _ = successDialog.ShowAsync();
+            await successDialog.ShowAsync();
         }
-
     }
 }

@@ -13,16 +13,19 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="AffichageActivite.xaml" />
+    <None Remove="AffichageSeance.xaml" />
     <None Remove="AjouterActivite.xaml" />
     <None Remove="AjouterSeance.xaml" />
     <None Remove="AjouterUsager.xaml" />
-    <None Remove="DetailsActivitePage.xaml" />
     <None Remove="ModalConnexion.xaml" />
     <None Remove="ModifierActivite.xaml" />
     <None Remove="ModifierActivitePage.xaml" />
+    <None Remove="ModifierSeance.xaml" />
     <None Remove="ModifierUsager.xaml" />
     <None Remove="SupprimerActivite.xaml" />
+    <None Remove="SupprimerSeance.xaml" />
     <None Remove="SupprimerUsager.xaml" />
+    <None Remove="VoirSeance.xaml" />
     <None Remove="VoirStatistique.xaml" />
   </ItemGroup>
 
@@ -53,6 +56,21 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="AffichageSeance.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ModifierSeance.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="SupprimerSeance.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="ModifierActivite.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -68,7 +86,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="DetailsActivitePage.xaml">
+    <Page Update="VoirSeance.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

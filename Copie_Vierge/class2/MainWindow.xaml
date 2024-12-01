@@ -7,16 +7,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-
-    <NavigationView PaneDisplayMode="Left" PaneTitle="Gestion des activités" x:Name="navView"
-                IsSettingsVisible="False" IsBackButtonVisible="Collapsed"
-                ItemInvoked="navView_ItemInvoked">
-
+    <!-- NavigationView principal -->
+    <NavigationView x:Name="navView"
+                    ItemInvoked="navView_ItemInvoked"
+                    PaneDisplayMode="Left"
+                    IsBackButtonVisible="Visible"
+                    IsBackEnabled="True">
         <NavigationView.MenuItems>
+            <!-- Menu principal -->
             <NavigationViewItem Content="Voir activités" x:Name="voirActivite" Icon="Home" ToolTipService.ToolTip="Liste des activités" />
+            <NavigationViewItem Content="Voir séances" x:Name="voirSeance" Icon="CalendarDay" ToolTipService.ToolTip="Liste des séances" />
+            <!-- Section Accès administrateur -->
             <NavigationViewItem Content="Accès administrateur" x:Name="adminSection" Icon="Admin" ToolTipService.ToolTip="Accès administrateur" SelectsOnInvoked="False">
-                
                 <NavigationViewItem.MenuItems>
+                    <!-- Gestion des utilisateurs -->
                     <NavigationViewItem Content="Gestion des utilisateurs" x:Name="gestionUtilisateurs" Icon="People" ToolTipService.ToolTip="Gestion des utilisateurs">
                         <NavigationViewItem.MenuItems>
                             <NavigationViewItem Content="Ajouter un usager" x:Name="ajouterUsager" Icon="AddFriend" ToolTipService.ToolTip="Ajouter un usager" />
@@ -24,18 +28,28 @@
                             <NavigationViewItem Content="Modifier un usager" x:Name="modifierUsager" Icon="Edit" ToolTipService.ToolTip="Modifier un usager" />
                         </NavigationViewItem.MenuItems>
                     </NavigationViewItem>
-                    
-                    <NavigationViewItem Content="Gestion des activités" x:Name="gestionSeances" Icon="Calendar" ToolTipService.ToolTip="Gestion des activités">
+
+                    <!-- Gestion des activités -->
+                    <NavigationViewItem Content="Gestion des activités" x:Name="gestionActivites" Icon="Calendar" ToolTipService.ToolTip="Gestion des activités">
                         <NavigationViewItem.MenuItems>
                             <NavigationViewItem Content="Ajouter une activité" x:Name="ajouterActivite" Icon="Add" ToolTipService.ToolTip="Ajouter une activité" />
-                            <NavigationViewItem Content="Supprimer une activité" x:Name="supprimerActivite" Icon="Delete" ToolTipService.ToolTip="Voir les activités" />
-                            <NavigationViewItem Content="Modifier une activité" x:Name="modifierActivite" Icon="Setting" ToolTipService.ToolTip="Voir les activités" />
+                            <NavigationViewItem Content="Supprimer une activité" x:Name="supprimerActivite" Icon="Delete" ToolTipService.ToolTip="Supprimer une activité" />
+                            <NavigationViewItem Content="Modifier une activité" x:Name="modifierActivite" Icon="Setting" ToolTipService.ToolTip="Modifier une activité" />
                         </NavigationViewItem.MenuItems>
                     </NavigationViewItem>
-                    
+
+                    <!-- Gestion des séances -->
+                    <NavigationViewItem Content="Gestion des séances" x:Name="gestionSeances" Icon="Clock" ToolTipService.ToolTip="Gestion des séances">
+                        <NavigationViewItem.MenuItems>
+                            <NavigationViewItem Content="Ajouter une séance" x:Name="ajouterSeance" Icon="AddFriend" ToolTipService.ToolTip="Ajouter une séance" />
+                            <NavigationViewItem Content="Supprimer une séance" x:Name="supprimerSeance" Icon="Delete" ToolTipService.ToolTip="Supprimer une séance" />
+                            <NavigationViewItem Content="Modifier une séance" x:Name="modifierSeance" Icon="Edit" ToolTipService.ToolTip="Modifier une séance" />
+                        </NavigationViewItem.MenuItems>
+                    </NavigationViewItem>
+
+                    <!-- Statistiques -->
                     <NavigationViewItem Content="Statistiques" x:Name="voirStatistique" Icon="Calculator" ToolTipService.ToolTip="Voir les statistiques" />
                 </NavigationViewItem.MenuItems>
-                
             </NavigationViewItem>
         </NavigationView.MenuItems>
 
@@ -44,7 +58,8 @@
             <NavigationViewItem Content="Déconnexion" x:Name="deconnexion" Icon="LeaveChat" ToolTipService.ToolTip="Déconnexion" />
         </NavigationView.FooterMenuItems>
 
-        <Frame x:Name="mainFrame" />
-    </NavigationView>
 
+        <!-- Contenu principal -->
+        <Frame x:Name="mainFrame"/>
+    </NavigationView>
 </Window>

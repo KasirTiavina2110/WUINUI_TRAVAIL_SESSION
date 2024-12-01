@@ -45,7 +45,7 @@ namespace class2
                 else if (currentUser.Role == "adherent")
                 {
                     // Naviguer vers la page d'inscription à une séance
-                    this.Frame.Navigate(typeof(DetailsActivitePage), selectedActivity);
+                    this.Frame.Navigate(typeof(VoirSeance), selectedActivity);
                 }
             }
             else
