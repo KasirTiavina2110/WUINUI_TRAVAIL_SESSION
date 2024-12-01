@@ -9,8 +9,52 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <ScrollViewer>
 
-        <TextBlock Foreground="Red">Page supprimer une activité</TextBlock>
-    </Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBlock FontSize="25" Margin="0 25 5 25" TextDecorations="Underline">Formulaire de supression d'une activité</TextBlock>
+                <SymbolIcon Symbol="Delete" Margin="0 5 0 0"></SymbolIcon>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                <TextBox Header="Entrer l'id d'une activité" PlaceholderText="Ex. : CIR-ART-003" Width="400" x:Name="id_activite"></TextBox>
+                <TextBlock x:Name="erreur_id_activite" Foreground="Red" Margin="0 0 0 10"></TextBlock>
+
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 75 0 0">
+                <Button x:Name="bouton_supprimer" Click="bouton_supprimer_Click">Supprimer</Button>
+                <TextBlock x:Name="suppression_reussi" Foreground="Green"></TextBlock>
+
+            </StackPanel>
+
+            <StackPanel Grid.Row="4" Margin="20 0 0 0">
+                <TextBlock Foreground="Red">**L'action de supprimer efface définitivement l'activité**</TextBlock>
+                <TextBlock Foreground="Red">**Vous devez supprimer les séances avant de supprimer l'activité**</TextBlock>
+
+            </StackPanel>
+
+        </Grid>
+
+
+    </ScrollViewer>
+
 </Page>

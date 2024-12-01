@@ -23,9 +23,51 @@ namespace class2
     /// </summary>
     public sealed partial class SupprimerActivite : Page
     {
+
+        bool valide;
         public SupprimerActivite()
         {
             this.InitializeComponent();
+        }
+
+        private void bouton_supprimer_Click(object sender, RoutedEventArgs e)
+        {
+
+            valide = true;
+
+            erreur_id_activite.Text = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(id_activite.Text))
+            {
+                erreur_id_activite.Text = "L'id de l'activité est obligatoire";
+                valide = false;
+            }
+            if (valide)
+            {
+                string identifiant = id_activite.Text.ToUpper();
+
+                int reponseRequete = Singleton.getInstance().supprimerActivite(identifiant);
+
+                if (reponseRequete > 0)
+                {
+
+                    suppression_reussi.Text = "Activité supprimée avec succès";
+                    id_activite.Text = string.Empty;
+
+                }
+                else if(reponseRequete == -1)
+                {
+                    erreur_id_activite.Text = "L'activité contient au moins 1 séance. Veuillez supprimer la ou les séances avant";
+                }
+                else
+                {
+                    erreur_id_activite.Text = "Le numéro d'activité n'existe pas dans le système";
+
+                }
+
+
+            }
+
         }
     }
 }

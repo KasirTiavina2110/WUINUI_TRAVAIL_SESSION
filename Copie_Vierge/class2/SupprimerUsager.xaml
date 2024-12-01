@@ -36,7 +36,6 @@
             </StackPanel>
 
             <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-                
                 <TextBox Header="Entrer le matricule de l'usager" Width="400" x:Name="matricule"></TextBox>
                 <TextBlock x:Name="erreur_matricule" Foreground="Red"></TextBlock>
                 

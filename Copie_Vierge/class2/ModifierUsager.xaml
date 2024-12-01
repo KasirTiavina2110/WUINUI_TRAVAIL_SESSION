@@ -66,20 +66,20 @@
 
         </StackPanel>
 
-            <StackPanel x:Name="section_dateNaissance" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25" Visibility="Collapsed">
+        <StackPanel x:Name="section_dateNaissance" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25" Visibility="Collapsed">
             <DatePicker x:Name="annee_naissance" Width="400" Header="Date de naissance"></DatePicker>
             <TextBlock x:Name="erreur_annee_naissance" Foreground="Red"></TextBlock>
 
         </StackPanel>
 
-            <StackPanel x:Name="section_adresse" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25" Visibility="Collapsed">
+        <StackPanel x:Name="section_adresse" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin=" 0 0 0 25" Visibility="Collapsed">
             <TextBox PlaceholderText="L'adresse de l'usager" x:Name="adresse_usager" Width="400"></TextBox>
             <TextBlock x:Name="erreur_adresse_usager" Foreground="Red"></TextBlock>
 
         </StackPanel>
 
 
-            <StackPanel x:Name="section_role" Grid.Row="7" Grid.ColumnSpan="2" HorizontalAlignment="Center" Visibility="Collapsed">
+        <StackPanel x:Name="section_role" Grid.Row="7" Grid.ColumnSpan="2" HorizontalAlignment="Center" Visibility="Collapsed">
             <ComboBox Header="Choississez le rôle de l'usager" x:Name="role">
                 <x:String>Admin</x:String>
                 <x:String>Adhérent</x:String>
@@ -88,8 +88,8 @@
             <TextBlock Name="erreur_role" Foreground="Red"></TextBlock>
         </StackPanel>
 
-            <StackPanel x:Name="section_btn_modification" Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 25 0 0" Visibility="Collapsed">
-                <Button Width="150" x:Name="bouton_modifier_usager" Click="bouton_modifier_usager_Click">Modifier</Button>
+        <StackPanel x:Name="section_btn_modification" Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 25 0 0" Visibility="Collapsed">
+            <Button Width="150" x:Name="bouton_modifier_usager" Click="bouton_modifier_usager_Click">Modifier</Button>
             <TextBlock x:Name="erreur_modification" Foreground="Red"></TextBlock>
         </StackPanel>
 
