@@ -244,6 +244,53 @@ namespace class2
 
         }
 
+        //Modifier une activite 
+        public bool modifierActivite(Activite activite)
+        {
+
+            try
+            {
+
+                MySqlCommand commande = new MySqlCommand();
+
+                commande.Connection = con;
+                commande.CommandText = "UPDATE activite " +
+                    "SET nom = @nom, annee = @annee, cout_organisation = @coutOrganisation, vente_client = @venteClient, type = @type, pochette = @pochette " +
+                    " WHERE id_activite = @idModifier";
+                commande.Parameters.AddWithValue("@nom", activite.Nom);
+                commande.Parameters.AddWithValue("@annee", activite.Annee);
+                commande.Parameters.AddWithValue("@coutOrganisation", activite.Cout_Organisation);
+                commande.Parameters.AddWithValue("@venteClient", activite.Vente_Client);
+                commande.Parameters.AddWithValue("@type", activite.Type);
+                commande.Parameters.AddWithValue("@pochette", activite.Pochette);
+                commande.Parameters.AddWithValue("idModifier", activite.Id);
+
+
+
+                con.Open();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
+                con.Close();
+
+                return i > 0;
+
+            }
+            catch(Exception ex)
+            {
+
+                if(con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+
+
+                return false;
+            }
+           
+
+
+        }
+
 
 
         // ------------------------- GESTION USAGERS ---------------------------------------------------------
