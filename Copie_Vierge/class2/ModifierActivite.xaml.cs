@@ -48,6 +48,7 @@ namespace class2
             valide = true;
 
             erreur_id_activite.Text = string.Empty;
+            modification_reussie.Text = string.Empty;
 
             cacherFormulaire();
 
@@ -97,6 +98,87 @@ namespace class2
                 else
                 {
                     erreur_id_activite.Text = "L'id de l'activité n'existe pas";
+                }
+            }
+
+        }
+
+        private void btn_modifier_activite_Click(object sender, RoutedEventArgs e)
+        {
+            valide = true;
+
+            erreur_id_activite.Text = string.Empty;
+            erreur_nom.Text = string.Empty;
+            erreur_cout_organisation.Text = string.Empty;
+            erreur_prix_vente.Text = string.Empty;
+            erreur_image.Text = string.Empty;
+            erreur_choix_type.Text = string.Empty;
+            erreur_choix_annee.Text = string.Empty;
+            modification_reussie.Text = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(id_activite.Text))
+            {
+                erreur_id_activite.Text = "Le matricule est obligatoire";
+                valide = false;
+
+            }
+            if (string.IsNullOrWhiteSpace(nom.Text))
+            {
+                erreur_nom.Text = "Le nom est obligatoire";
+                valide = false;
+            }
+            if (string.IsNullOrWhiteSpace(cout_organisation.Text))
+            {
+                erreur_cout_organisation.Text = "Le cout de l'organisation est obligatoire";
+                valide = false;
+            }
+            if (string.IsNullOrWhiteSpace(prix_vente.Text))
+            {
+                erreur_prix_vente.Text = "Le prix de vente aux adhérents est obligatoire";
+                valide = false;
+
+            }
+            if (string.IsNullOrWhiteSpace(image.Text))
+            {
+                erreur_image.Text = "Le lien de l'image est obligatoire";
+                valide = false;
+            }
+            if(choix_type.SelectedIndex == -1)
+            {
+                erreur_choix_type.Text = "Le choix du type est obligatoire";
+                valide = false;
+            }
+            if(choix_annee.SelectedIndex == -1)
+            {
+                erreur_choix_annee.Text = "Le choix de l'année est obligatoire";
+                valide = false;
+            }
+
+            if (valide)
+            {
+                string identifiant = id_activite.Text;
+
+                string nomActivite = nom.Text;
+                double coutOrganisationActivite = Double.Parse(cout_organisation.Text);
+                double prixVenteActivite = Double.Parse(prix_vente.Text);
+                string imageActivite = image.Text;
+                string typeActivite = choix_type.SelectedIndex.ToString();
+                string anneActivite = choix_annee.SelectedIndex.ToString();
+
+                Activite activite = new Activite(identifiant, nomActivite, anneActivite, coutOrganisationActivite, prixVenteActivite, typeActivite, imageActivite);
+
+                bool reussi = Singleton.getInstance().modifierActivite(activite);
+
+                if (reussi)
+                {
+                    id_activite.Text = string.Empty;
+                    cacherFormulaire();
+                    modification_reussie.Text = "Modification réussie";
+
+                }
+                else
+                {
+                    erreur_id_activite.Text = "L'id n'existe pas";
                 }
             }
 

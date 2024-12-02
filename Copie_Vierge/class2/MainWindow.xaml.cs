@@ -1,6 +1,11 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using MySqlX.XDevAPI;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace class2
 {
@@ -59,6 +64,12 @@ namespace class2
                         break;
                     case "voirStatistique":
                         mainFrame.Navigate(typeof(VoirStatistique));
+                        break;
+                    case "exporterCsvAdherent":
+                        await ExporterCsvAdherent();
+                        break;
+                    case "exporterCsvActivite":
+                        await ExporterCsvActivite();
                         break;
                     case "connexion":
                         var modalConnexion = new ModalConnexion();
@@ -131,6 +142,86 @@ namespace class2
                 XamlRoot = navView.XamlRoot
             };
             await successDialog.ShowAsync();
+        }
+
+        //Exporter un CSV
+        public async Task ExporterCsvAdherent()
+        {
+            var picker = new Windows.Storage.Pickers.FileSavePicker();
+
+            var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+            WinRT.Interop.InitializeWithWindow.Initialize(picker, hWnd);
+
+            picker.SuggestedFileName = "Liste des adhérents";
+            picker.FileTypeChoices.Add("Liste des adhérents", new List<string>() { ".csv" });
+
+            //crée le fichier
+            Windows.Storage.StorageFile monFichier = await picker.PickSaveFileAsync();
+
+            if (monFichier != null)
+            {
+                //Aller chercher la liste
+                var liste = Singleton.getInstance().GetListeAdherents();
+
+                if(liste != null)
+                {
+                    //Convertir en List pour pouvoir ConvertAll
+                    List<Usager> listeUsager = liste.ToList();
+
+                    if (liste != null && liste.Count > 0)
+                    {
+                        await Windows.Storage.FileIO.WriteLinesAsync(monFichier, listeUsager.ConvertAll(x => x.ExportationCSV), Windows.Storage.Streams.UnicodeEncoding.Utf8);
+                    }
+                    else
+                    {
+                        await Windows.Storage.FileIO.WriteTextAsync(monFichier, "Aucune donnée à exporter", Windows.Storage.Streams.UnicodeEncoding.Utf8);
+                    }
+                }
+                else
+                {
+                    await Windows.Storage.FileIO.WriteTextAsync(monFichier, "Erreur : La liste des usagers est null.", Windows.Storage.Streams.UnicodeEncoding.Utf8);
+                }
+            }
+
+        }
+
+        public async Task ExporterCsvActivite()
+        {
+            var picker = new Windows.Storage.Pickers.FileSavePicker();
+
+            var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+            WinRT.Interop.InitializeWithWindow.Initialize(picker, hWnd);
+
+            picker.SuggestedFileName = "Liste des activités";
+            picker.FileTypeChoices.Add("Liste des activités", new List<string>() { ".csv" });
+
+            //crée le fichier
+            Windows.Storage.StorageFile monFichier = await picker.PickSaveFileAsync();
+
+            if (monFichier != null)
+            {
+                //Aller chercher la liste
+                var liste = Singleton.getInstance().getListeActivite();
+
+                if (liste != null)
+                {
+                    //Convertir en List pour pouvoir ConvertAll
+                    List<Activite> listeActivite = liste.ToList();
+
+                    if (liste != null && liste.Count > 0)
+                    {
+                        await Windows.Storage.FileIO.WriteLinesAsync(monFichier, listeActivite.ConvertAll(x => x.ExportationCSV), Windows.Storage.Streams.UnicodeEncoding.Utf8);
+                    }
+                    else
+                    {
+                        await Windows.Storage.FileIO.WriteTextAsync(monFichier, "Aucune donnée à exporter", Windows.Storage.Streams.UnicodeEncoding.Utf8);
+                    }
+                }
+                else
+                {
+                    await Windows.Storage.FileIO.WriteTextAsync(monFichier, "Erreur : La liste des activités est null.", Windows.Storage.Streams.UnicodeEncoding.Utf8);
+                }
+            }
         }
     }
 }

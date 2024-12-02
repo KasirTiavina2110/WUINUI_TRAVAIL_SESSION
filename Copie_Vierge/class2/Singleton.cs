@@ -8,6 +8,7 @@ using MySql.Data.MySqlClient;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using Windows.System;
+using System.Data;
 
 
 
@@ -18,8 +19,8 @@ namespace class2
 
         MySqlConnection con;
         ObservableCollection<Activite> listeActivite;
-        ObservableCollection<Seance> listeSeance; 
-
+        ObservableCollection<Usager> listeUsager;
+   
         public static Singleton instance = null;
 
 
@@ -27,7 +28,6 @@ namespace class2
         {
             con = new MySqlConnection("Server=cours.cegep3r.info;Database=a2024_420-345-ri_eq15;Uid=1748697;Pwd=1748697;");
             listeActivite = new ObservableCollection<Activite>();
-            listeSeance = new ObservableCollection<Seance>();
 
 
         }
@@ -50,109 +50,49 @@ namespace class2
             afficherActivite();
             return listeActivite;
         }
-        public ObservableCollection<Seance> getListeSeance()
-        {
-            affichageSeance();
-            return listeSeance;
-        }
-        //-------------------------- GESTION DES SEANCES -------------------------------------------
 
-        //Aller chercher la liste des seances
-        private void affichageSeance() // Pour les non adherents qui veulent voir les seances dispo
+        //Recevoir la liste des utilisateurs
+        public ObservableCollection<Usager> GetListeAdherents()
         {
+            ObservableCollection<Usager> listeAdherents = new ObservableCollection<Usager>();
+
             try
             {
-                listeSeance.Clear(); //Afin d'éviter l'accumulation des fausses données
-
                 MySqlCommand commande = new MySqlCommand();
                 commande.Connection = con;
-                commande.CommandText = "SELECT * FROM seance";
+                commande.CommandText = "SELECT * FROM adherent WHERE role = 'adherent'";
 
                 con.Open();
                 MySqlDataReader reader = commande.ExecuteReader();
+
                 while (reader.Read())
                 {
-                    int id_seance = Convert.ToInt32(reader["id_seance"]);
-                    string numero_activite = reader["numero_activite"].ToString();
-                    DateTime date = Convert.ToDateTime(reader["date"]);
-                    TimeSpan heure = TimeSpan.Parse(reader["heure"].ToString());
-                    int? place_dispo = reader["place_dispo"] != DBNull.Value ? (int?)Convert.ToInt32(reader["place_dispo"]) : null;
-                    int? place_prise = reader["place_prise"] != DBNull.Value ? (int?)Convert.ToInt32(reader["place_prise"]) : null;
-                    int place_max = Convert.ToInt32(reader["place_max"]);
-
-                    Seance seance = new Seance
+                    Usager usager = new Usager
                     {
-                        Id_seance = id_seance,
-                        Numero_activite = numero_activite,
-                        Date = date,
-                        Heure = heure,
-                        Place_dispo = place_dispo,
-                        Place_prise = place_prise,
-                        Place_max = place_max
+                        NumeroIdentification = reader["numero_identification"].ToString(),
+                        Nom = reader["Nom"].ToString(),
+                        Prenom = reader["Prenom"].ToString(),
+                        Age = Convert.ToInt32(reader["age"])
                     };
 
-                    listeSeance.Add(seance);
-
+                    listeAdherents.Add(usager);
                 }
+
                 reader.Close();
                 con.Close();
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
-                con.Close();
-            }
-        }
-        // Nouvelle méthode pour récupérer les séances par activité 
-        public ObservableCollection<Seance> GetSeancesByActivity(string activityCode)
-        {
-            ObservableCollection<Seance> seancesByActivity = new ObservableCollection<Seance>();
-
-            try
-            {
-                MySqlCommand commande = new MySqlCommand
+                // Gérez les exceptions ici
+                if (con.State == ConnectionState.Open)
                 {
-                    Connection = con,
-                    CommandText = @"
-                SELECT s.* 
-                FROM seance s
-                INNER JOIN activite a ON s.numero_activite = a.id_activite
-                WHERE a.id_activite = @activityCode"
-                };
-                commande.Parameters.AddWithValue("@activityCode", activityCode);
-
-                con.Open();
-                using (MySqlDataReader reader = commande.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        Seance seance = new Seance
-                        {
-                            Id_seance = Convert.ToInt32(reader["id_seance"]),
-                            Numero_activite = reader["numero_activite"].ToString(),
-                            Date = Convert.ToDateTime(reader["date"]),
-                            Heure = TimeSpan.Parse(reader["heure"].ToString()),
-                            Place_dispo = reader["place_dispo"] != DBNull.Value ? (int?)Convert.ToInt32(reader["place_dispo"]) : null,
-                            Place_prise = Convert.ToInt32(reader["place_prise"]),
-                            Place_max = Convert.ToInt32(reader["place_max"])
-                        };
-
-                        seancesByActivity.Add(seance);
-                    }
+                    con.Close();
                 }
-                con.Close();
-
-                // Debug : Afficher le nombre de séances récupérées
-                System.Diagnostics.Debug.WriteLine($"Nombre de séances pour l'activité {activityCode} : {seancesByActivity.Count}");
-            }
-            catch (MySqlException ex)
-            {
-                con.Close();
-                // Gérer l'exception (log, message à l'utilisateur, etc.)
-                System.Diagnostics.Debug.WriteLine("Erreur lors du chargement des séances par activité : " + ex.Message);
             }
 
-            return seancesByActivity;
+            return listeAdherents;
         }
+
 
 
 
@@ -351,6 +291,53 @@ namespace class2
 
         }
 
+        //Modifier une activite 
+        public bool modifierActivite(Activite activite)
+        {
+
+            try
+            {
+
+                MySqlCommand commande = new MySqlCommand();
+
+                commande.Connection = con;
+                commande.CommandText = "UPDATE activite " +
+                    "SET nom = @nom, annee = @annee, cout_organisation = @coutOrganisation, vente_client = @venteClient, type = @type, pochette = @pochette " +
+                    " WHERE id_activite = @idModifier";
+                commande.Parameters.AddWithValue("@nom", activite.Nom);
+                commande.Parameters.AddWithValue("@annee", activite.Annee);
+                commande.Parameters.AddWithValue("@coutOrganisation", activite.Cout_Organisation);
+                commande.Parameters.AddWithValue("@venteClient", activite.Vente_Client);
+                commande.Parameters.AddWithValue("@type", activite.Type);
+                commande.Parameters.AddWithValue("@pochette", activite.Pochette);
+                commande.Parameters.AddWithValue("idModifier", activite.Id);
+
+
+
+                con.Open();
+                commande.Prepare();
+                int i = commande.ExecuteNonQuery();
+                con.Close();
+
+                return i > 0;
+
+            }
+            catch(Exception ex)
+            {
+
+                if(con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+
+
+                return false;
+            }
+           
+
+
+        }
+
 
 
         // ------------------------- GESTION USAGERS ---------------------------------------------------------
@@ -492,7 +479,7 @@ namespace class2
 
             MySqlCommand commande = new MySqlCommand();
 
-            commande.Connection = con;
+            commande.Connection = con; 
             commande.CommandText = "UPDATE adherent " +
                 "SET nom = @nom, prenom = @prenom, adresse = @adresse, date_naissance = @dateNaissance, age = @age, role = @role " +
                 " WHERE numero_identification = @matricule";
@@ -513,34 +500,6 @@ namespace class2
             return i > 0;
 
         }
-        public bool InscriptionSeance(int idSeance, string numeroAdherent)
-        {
-            try
-            {
-                MySqlCommand commande = new MySqlCommand
-                {
-                    Connection = con,
-                    CommandText = @"
-                INSERT INTO inscription (id_seance, numero_adherent)
-                VALUES (@idSeance, @numeroAdherent)"
-                };
-                commande.Parameters.AddWithValue("@idSeance", idSeance);
-                commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
-
-                con.Open();
-                int rowsAffected = commande.ExecuteNonQuery();
-                con.Close();
-
-                return rowsAffected > 0; // Inscription réussie
-            }
-            catch (MySqlException ex)
-            {
-                con.Close();
-                throw; // Relancer l'exception pour traitement dans l'interface
-            }
-        }
-
-
 
 
     }

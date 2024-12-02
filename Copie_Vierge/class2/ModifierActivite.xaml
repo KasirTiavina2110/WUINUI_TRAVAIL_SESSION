@@ -14,17 +14,12 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
+                
             </Grid.ColumnDefinitions>
 
             <!-- Première section -->
@@ -82,7 +77,8 @@
                     </StackPanel>
                 </StackPanel>
                 <StackPanel x:Name="container_button" HorizontalAlignment="Center" Margin="0 50 0 30">
-                    <Button>Modifier</Button>
+                    <Button x:Name="btn_modifier_activite" Click="btn_modifier_activite_Click">Modifier</Button>
+
                 </StackPanel>
             </StackPanel>
         </Grid>
