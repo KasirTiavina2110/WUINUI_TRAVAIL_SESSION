@@ -1,15 +1,73 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="class2.AffichageSeance"
+    x:Name="PageRoot"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:class2"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
-    <Grid>
+    <Page.Resources>
+        <!-- Déclaration des Convertisseurs -->
+        <local:IsAdherentConverter x:Key="IsAdherentConverter" />
+        <local:IsAdminConverter x:Key="IsAdminConverter" />
+        <!-- Convertisseurs pour le formatage des dates et heures -->
+        <local:DateFormatter x:Key="DateFormatter" />
+        <local:TimeFormatter x:Key="TimeFormatter" />
+    </Page.Resources>
 
+    <Grid Padding="20">
+        <Grid.Background>
+            <ImageBrush ImageSource="https://thumbs.dreamstime.com/b/d%C3%A9chirer-la-feuille-de-calendrier-est-date-du-dernier-jour-mois-concept-d%C3%A9lai-page-mod%C3%A8le-dessin-vectoriel-plat-isol%C3%A9-sur-fond-262326512.jpg"
+            Stretch="UniformToFill"
+            Opacity="1" />
+        </Grid.Background>
+        <ListView x:Name="SeanceListView"
+                  ItemsSource="{Binding SeanceList}"
+                  IsItemClickEnabled="True"
+                  ItemClick="SeanceListView_ItemClick">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="1" BorderBrush="Black" Padding="10" Margin="5">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <!-- Contenu Texte -->
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold" FontSize="16" Foreground="Navy">
+                                    <Run Text="Séance n° " />
+                                    <Run Text="{Binding Id_seance}" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Nom de l'activité : " />
+                                    <Run Text="{Binding Numero_activite}"  Foreground="Sienna" FontWeight="Bold"/>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Date : " />
+                                    <Run Text="{Binding Date, Converter={StaticResource DateFormatter}}" Foreground="Sienna" FontWeight="Bold"/>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Heure : " />
+                                    <Run Text="{Binding Heure, Converter={StaticResource TimeFormatter}}" Foreground="Sienna" FontWeight="Bold"/>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Places disponibles : " />
+                                    <Run Text="{Binding Place_dispo}" Foreground="DarkGreen" FontWeight="Bold"/>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Places prises : " />
+                                    <Run Text="{Binding Place_prise}" Foreground="Firebrick" FontWeight="Bold"/>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Places maximales : " />
+                                    <Run Text="{Binding Place_max}" Foreground="DarkRed" FontWeight="Bold"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                           
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

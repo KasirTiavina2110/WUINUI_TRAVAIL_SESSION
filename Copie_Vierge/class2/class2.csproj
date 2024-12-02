@@ -17,6 +17,7 @@
     <None Remove="AjouterActivite.xaml" />
     <None Remove="AjouterSeance.xaml" />
     <None Remove="AjouterUsager.xaml" />
+    <None Remove="Inscription.xaml" />
     <None Remove="ModalConnexion.xaml" />
     <None Remove="ModifierActivite.xaml" />
     <None Remove="ModifierActivitePage.xaml" />
@@ -54,6 +55,11 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Inscription.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="AffichageSeance.xaml">
