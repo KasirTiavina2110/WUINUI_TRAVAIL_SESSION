@@ -112,7 +112,6 @@ namespace class2
 
         }
 
-        //Afficher les champs de l'usager à modifier
         private void bouton_modifier_usager_Click(object sender, RoutedEventArgs e)
         {
             valide = true;

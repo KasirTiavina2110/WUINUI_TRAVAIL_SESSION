@@ -143,6 +143,15 @@ namespace class2
             }
         }
 
+        public string ExportationCSV
+        {
+            get
+            {
+                return $"{NumeroIdentification} - {Prenom} {Nom} - {Age} ans ";
+            }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
