@@ -1,0 +1,86 @@
+<Page
+    x:Class="class2.VoirSeance"
+    x:Name="PageRoot"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:class2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <!-- Convertisseurs pour le formatage des dates et heures -->
+        <local:DateFormatter x:Key="DateFormatter" />
+        <local:TimeFormatter x:Key="TimeFormatter" />
+    </Page.Resources>
+
+    <Grid Padding="20">
+        <Grid.Background>
+            <ImageBrush ImageSource="https://img.freepik.com/free-vector/schedule-concept-illustration_114360-1531.jpg"
+                         Stretch="UniformToFill"
+                Opacity="0.5"/>
+        </Grid.Background>
+        <StackPanel>
+            <!-- InfoBar pour afficher les messages d'erreur -->
+            <InfoBar
+                x:Name="ErrorInfoBar"
+                IsOpen="{x:Bind IsInfoBarVisible, Mode=TwoWay}"
+                Severity="{x:Bind InfoBarSeverity, Mode=TwoWay}"
+                Title="{x:Bind InfoBarTitle, Mode=TwoWay}"
+                Message="{x:Bind InfoBarMessage, Mode=TwoWay}"
+                IsClosable="True"
+                Margin="0,0,0,20"
+                HorizontalAlignment="Stretch">
+            </InfoBar>
+
+            <!-- Afficher le Code de l'Activité -->
+            <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,20">
+                <Run Text="Séances pour l'activité : " />
+                <Run Text="{x:Bind ActivityCode}" Foreground="Navy"/>
+            </TextBlock>
+
+            <!-- Liste des Séances -->
+            <ListView ItemsSource="{Binding SeanceList}"
+                      IsItemClickEnabled="True"
+                      ItemClick="SeanceListView_ItemClick" >
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:Seance">
+                        <Border BorderThickness="1" BorderBrush="Black" Padding="10" Margin="5">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontWeight="Bold" FontSize="16">
+                                    <Run Text="Séance n° " Foreground="Navy"/>
+                                    <Run Text="{x:Bind Id_seance}" Foreground="Navy" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Date : " Foreground="Navy"/>
+                                    <Run Text="{x:Bind Date, Converter={StaticResource DateFormatter}}" Foreground="Sienna"  />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Heure : " Foreground="Navy"/>
+                                    <Run Text="{x:Bind Heure, Converter={StaticResource TimeFormatter}}" Foreground="Sienna" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Places disponibles : " Foreground="Navy"/>
+                                    <Run Text="{x:Bind Place_dispo}" Foreground="DarkGreen" FontWeight="Bold"/>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Places prises : " Foreground="Navy"/>
+                                    <Run Text="{x:Bind Place_prise}" Foreground="Firebrick" FontWeight="Bold" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Places maximales : " Foreground="Navy"/>
+                                    <Run Text="{x:Bind Place_max}" Foreground="DarkRed" FontWeight="Bold" />
+                                </TextBlock>
+                                <Button Content="Ajouter"
+                            HorizontalAlignment="Right"
+                            Background="LightGreen"
+                            Click="InscriptionButton_Click"
+                            Tag="{x:Bind Id_seance}" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+    </Grid>
+</Page>
