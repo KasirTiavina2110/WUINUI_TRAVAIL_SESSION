@@ -37,7 +37,13 @@ namespace class2
 
             if (currentUser != null)
             {
-                if (currentUser.Role == "adherent")
+
+                if (currentUser.Role == "admin")
+                {
+                    // Naviguer vers la page de modification de l'activité
+                    this.Frame.Navigate(typeof(ModifierActivite), selectedActivity.Id);
+                }
+                else if (currentUser.Role == "adherent")
                 {
                     // Naviguer vers la page d'inscription à une séance
                     this.Frame.Navigate(typeof(VoirSeance), selectedActivity.Id);
