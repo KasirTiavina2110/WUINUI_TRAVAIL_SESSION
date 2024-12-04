@@ -31,6 +31,17 @@
                           PlaceholderText="Sélectionnez une séance"
                           Width="300" />
 
+                <!-- DatePicker pour sélectionner la date -->
+                <TextBlock Text="Date d'inscription" Margin="0 20 0 0" />
+                <DatePicker x:Name="datePicker"
+                            Width="300" />
+
+                <!-- TextBox pour afficher l'heure automatiquement -->
+                <TextBlock Text="Heure d'inscription" Margin="0 20 0 0" />
+                <TextBox x:Name="txtHeureInscription"
+                         IsReadOnly="True"
+                         Width="300" />
+
                 <!-- Bouton Ajouter -->
                 <Button x:Name="btnAjouter"
                         Content="Ajouter"

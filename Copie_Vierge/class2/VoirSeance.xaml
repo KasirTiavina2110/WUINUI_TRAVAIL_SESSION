@@ -71,7 +71,7 @@
                                     <Run Text="Places maximales : " Foreground="Navy"/>
                                     <Run Text="{x:Bind Place_max}" Foreground="DarkRed" FontWeight="Bold" />
                                 </TextBlock>
-                                <Button Content="Ajouter"
+                                <Button Content="S'inscrire"
                             HorizontalAlignment="Right"
                             Background="LightGreen"
                             Click="InscriptionButton_Click"

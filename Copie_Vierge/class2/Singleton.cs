@@ -953,52 +953,59 @@ namespace class2
             }
         }
 
+        // Vérifier si une inscription existe
         public bool VerifierInscriptionExiste(string numeroAdherent, int idSeance)
         {
             try
             {
-                MySqlCommand commande = new MySqlCommand(
-                    "SELECT COUNT(*) FROM inscription WHERE numero_adherent = @numeroAdherent AND id_seance = @idSeance", con);
+                MySqlCommand cmd = new MySqlCommand(@"
+            SELECT COUNT(*) FROM inscription 
+            WHERE numero_adherent = @numeroAdherent AND id_seance = @idSeance", con);
 
-                commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
-                commande.Parameters.AddWithValue("@idSeance", idSeance);
+                cmd.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
+                cmd.Parameters.AddWithValue("@idSeance", idSeance);
 
                 con.Open();
-                int count = Convert.ToInt32(commande.ExecuteScalar());
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
                 con.Close();
 
-                return count > 0; // Retourne true si l'inscription existe déjà
+                return count > 0;
             }
             catch (MySqlException ex)
             {
                 Debug.WriteLine("Erreur lors de la vérification de l'inscription : " + ex.Message);
-                if (con.State == ConnectionState.Open) con.Close();
+                con.Close();
                 return false;
             }
         }
-        public bool AjouterInscription(string numeroAdherent, int idSeance)
+
+        // Ajouter une inscription
+        public bool AjouterInscription(Inscription inscription)
         {
             try
             {
-                MySqlCommand commande = new MySqlCommand(
-                    "INSERT INTO inscription (numero_adherent, id_seance) VALUES (@numeroAdherent, @idSeance)", con);
+                MySqlCommand cmd = new MySqlCommand(@"
+            INSERT INTO inscription (numero_adherent, id_seance, date_inscription) 
+            VALUES (@numeroAdherent, @idSeance, @dateInscription)", con);
 
-                commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
-                commande.Parameters.AddWithValue("@idSeance", idSeance);
+                cmd.Parameters.AddWithValue("@numeroAdherent", inscription.Numero_adherent);
+                cmd.Parameters.AddWithValue("@idSeance", inscription.Id_seance);
+                cmd.Parameters.AddWithValue("@dateInscription", inscription.Date_inscription);
 
                 con.Open();
-                int rowsAffected = commande.ExecuteNonQuery();
+                int rowsAffected = cmd.ExecuteNonQuery();
                 con.Close();
 
-                return rowsAffected > 0; // Retourne true si l'insertion a réussi
+                return rowsAffected > 0;
             }
             catch (MySqlException ex)
             {
                 Debug.WriteLine("Erreur lors de l'ajout de l'inscription : " + ex.Message);
-                if (con.State == ConnectionState.Open) con.Close();
+                con.Close();
                 return false;
             }
         }
+
         public bool ModifierInscription(string numeroAdherent, int idSeance)
         {
             try

@@ -10,6 +10,7 @@ namespace class2
         {
             this.InitializeComponent();
             ChargerAdherentsEtSeances();
+            InitialiserDateEtHeureInscription();
         }
 
         // Charger la liste des numero_identification et id_seance dans les ComboBox
@@ -34,6 +35,13 @@ namespace class2
             }
         }
 
+        // Initialiser la date et l'heure d'inscription
+        private void InitialiserDateEtHeureInscription()
+        {
+            datePicker.Date = DateTimeOffset.Now; // Date actuelle
+            txtHeureInscription.Text = DateTime.Now.ToString("HH:mm:ss"); // Heure actuelle
+        }
+
         // Bouton Ajouter
         private void btnAjouter_Click(object sender, RoutedEventArgs e)
         {
@@ -43,8 +51,9 @@ namespace class2
                 return;
             }
 
-            string numeroAdherent = comboNumeroIdentification.SelectedValue.ToString();
-            int idSeance = (int)comboIdSeance.SelectedValue;
+            string numeroAdherent = comboNumeroIdentification.SelectedValue?.ToString();
+            int idSeance = int.Parse(comboIdSeance.SelectedValue.ToString());
+            DateTime dateInscription = datePicker.Date.DateTime.Add(TimeSpan.Parse(txtHeureInscription.Text)); // Combinaison de la date et l'heure
 
             // Vérifier si l'inscription existe déjà
             if (Singleton.getInstance().VerifierInscriptionExiste(numeroAdherent, idSeance))
@@ -54,10 +63,17 @@ namespace class2
                 return;
             }
 
-            // Ajouter l'inscription dans la base de données
-            if (Singleton.getInstance().AjouterInscription(numeroAdherent, idSeance))
+            // Créer une nouvelle inscription
+            Inscription nouvelleInscription = new Inscription
             {
-                // Rediriger vers la liste des inscriptions après insertion réussie
+                Numero_adherent = numeroAdherent,
+                Id_seance = idSeance,
+                Date_inscription = dateInscription
+            };
+
+            // Ajouter l'inscription
+            if (Singleton.getInstance().AjouterInscription(nouvelleInscription))
+            {
                 Frame.Navigate(typeof(AffichageInscriptions));
             }
             else
@@ -77,6 +93,7 @@ namespace class2
                 infoBar.Message = "Veuillez sélectionner un adhérent.";
                 return false;
             }
+
             if (comboIdSeance.SelectedValue == null)
             {
                 infoBar.Message = "Veuillez sélectionner une séance.";

@@ -398,3 +398,8 @@ FodyWeavers.xsd
 *.sln.iml
 Copie_Vierge/class2/class2-DESKTOP-PQSHT6D.csproj
 Copie_Vierge/class2/MainWindow.xaml-DESKTOP-PQSHT6D.cs
+Copie_Vierge/class2/AffichageActivite.xaml.cs
+Copie_Vierge/class2/ModifierActivitePage.xaml.cs
+Copie_Vierge/class2/ModifierActivitePage.xaml
+Copie_Vierge/class2/AffichageActivite.xaml.cs
+*.cs

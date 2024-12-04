@@ -239,10 +239,10 @@ namespace class2
         {
             if (InfoBarTitle != title || InfoBarMessage != message || InfoBarSeverity != severity)
             {
-                InfoBarTitle = title;
-                InfoBarMessage = message;
-                InfoBarSeverity = severity;
-                IsInfoBarVisible = true;
+                _infoBarTitle = title;
+                _infoBarMessage = message;
+                _infoBarSeverity = severity;
+                _isInfoBarVisible = true;
             }
         }
 
