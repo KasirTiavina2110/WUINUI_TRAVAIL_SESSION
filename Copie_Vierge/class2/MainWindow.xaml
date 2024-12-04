@@ -12,7 +12,10 @@
                     ItemInvoked="navView_ItemInvoked"
                     PaneDisplayMode="Left"
                     IsBackButtonVisible="Visible"
-                    IsBackEnabled="True">
+                    IsBackEnabled="True"
+                    IsSettingsVisible="False">
+        <!-- Supprime le bouton Paramètres -->
+
         <NavigationView.MenuItems>
             <!-- Menu principal -->
             <NavigationViewItem Content="Voir activités" x:Name="voirActivite" Icon="Home" ToolTipService.ToolTip="Liste des activités" />
@@ -44,8 +47,14 @@
                     <NavigationViewItem Content="Gestion des séances" x:Name="gestionSeances" Icon="Clock" ToolTipService.ToolTip="Gestion des séances">
                         <NavigationViewItem.MenuItems>
                             <NavigationViewItem Content="Ajouter une séance" x:Name="ajouterSeance" Icon="AddFriend" ToolTipService.ToolTip="Ajouter une séance" />
-                            <NavigationViewItem Content="Supprimer une séance" x:Name="supprimerSeance" Icon="Delete" ToolTipService.ToolTip="Supprimer une séance" />
-                            <NavigationViewItem Content="Modifier une séance" x:Name="modifierSeance" Icon="Edit" ToolTipService.ToolTip="Modifier une séance" />
+                        </NavigationViewItem.MenuItems>
+                    </NavigationViewItem>
+
+                    <NavigationViewItem Content="Gestion des inscriptions" x:Name="gestionInscriptions" Icon="AddFriend" ToolTipService.ToolTip="Gestion des inscriptions">
+                        <NavigationViewItem.MenuItems>
+                            <NavigationViewItem Content="Ajouter une inscription" x:Name="ajouterInscription" Icon="Add" ToolTipService.ToolTip="Ajouter une inscription" />
+                            <NavigationViewItem Content="Modifier une inscription" x:Name="modifierInscription" Icon="Edit" ToolTipService.ToolTip="Modifier une inscription" />
+                            <NavigationViewItem Content="Liste des inscris" x:Name="obtenirListeInscription" Icon="List" ToolTipService.ToolTip="Liste inscrit" />
                         </NavigationViewItem.MenuItems>
                     </NavigationViewItem>
 
@@ -59,7 +68,6 @@
             <NavigationViewItem Content="Connexion" x:Name="connexion" Icon="Contact" ToolTipService.ToolTip="Connexion" />
             <NavigationViewItem Content="Déconnexion" x:Name="deconnexion" Icon="LeaveChat" ToolTipService.ToolTip="Déconnexion" />
         </NavigationView.FooterMenuItems>
-
 
         <!-- Contenu principal -->
         <Frame x:Name="mainFrame"/>

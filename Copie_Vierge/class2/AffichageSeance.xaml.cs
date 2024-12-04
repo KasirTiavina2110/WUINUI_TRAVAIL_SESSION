@@ -53,11 +53,7 @@ namespace class2
                     // Naviguer vers la page de modification de la séance
                     this.Frame.Navigate(typeof(ModifierSeance), selectedSeance);
                 }
-                else if (currentUser.Role == "adherent")
-                {
-                    // Naviguer vers la page d'inscription à la séance
-                    this.Frame.Navigate(typeof(Inscription), selectedSeance);
-                }
+                
             }
             else
             {

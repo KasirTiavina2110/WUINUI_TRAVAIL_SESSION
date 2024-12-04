@@ -30,7 +30,7 @@ namespace class2
         {
             con = new MySqlConnection("Server=cours.cegep3r.info;Database=a2024_420-345-ri_eq15;Uid=1748697;Pwd=1748697;");
             listeActivite = new ObservableCollection<Activite>();
-
+            listeSeance = new ObservableCollection<Seance>();
 
         }
 
@@ -71,7 +71,7 @@ namespace class2
                 {
                     Usager usager = new Usager
                     {
-                        NumeroIdentification = reader["numero_identification"].ToString(),
+                        NumeroIdentification = reader["id_activite"].ToString(),
                         Nom = reader["Nom"].ToString(),
                         Prenom = reader["Prenom"].ToString(),
                         Age = Convert.ToInt32(reader["age"])
@@ -123,7 +123,7 @@ namespace class2
                     string type = reader[5].ToString();
                     string pochette = reader[6].ToString();
 
-                    Activite activite = new Activite(id,nom,annee,cout_organisation,vente_client,type,pochette);
+                    Activite activite = new Activite(id, nom, annee, cout_organisation, vente_client, type, pochette);
                     listeActivite.Add(activite);
 
                 }
@@ -147,7 +147,7 @@ namespace class2
             //Compter si des séances existent
             int reponseRequete = compterSeance(id_activite);
 
-            if(reponseRequete > 0)
+            if (reponseRequete > 0)
             {
                 return -1;
             }
@@ -324,10 +324,10 @@ namespace class2
                 return i > 0;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
-                if(con.State == System.Data.ConnectionState.Open)
+                if (con.State == System.Data.ConnectionState.Open)
                 {
                     con.Close();
                 }
@@ -335,7 +335,7 @@ namespace class2
 
                 return false;
             }
-           
+
 
 
         }
@@ -397,7 +397,7 @@ namespace class2
             MySqlCommand commande = new MySqlCommand();
 
             commande.Connection = con;
-            commande.CommandText = "DELETE FROM adherent WHERE numero_identification = @matricule";
+            commande.CommandText = "DELETE FROM adherent WHERE id_activite = @matricule";
             commande.Parameters.AddWithValue("@matricule", numero_identifiaction);
 
             con.Open();
@@ -413,13 +413,13 @@ namespace class2
         //Vérifier si un matricule return 1 ou 0
         public int verifierSiExiste(string matricule)
         {
-            string numero_identification = matricule;
+            string id_activite = matricule;
 
             MySqlCommand commande = new MySqlCommand();
 
             commande.Connection = con;
-            commande.CommandText = "SELECT COUNT(*) FROM adherent WHERE numero_identification = @matricule";
-            commande.Parameters.AddWithValue("@matricule", numero_identification);
+            commande.CommandText = "SELECT COUNT(*) FROM adherent WHERE id_activite = @matricule";
+            commande.Parameters.AddWithValue("@matricule", id_activite);
 
             con.Open();
             commande.Prepare();
@@ -439,13 +439,13 @@ namespace class2
 
             Usager utilisateur = null;
 
-            string numero_identification = matricule;
+            string id_activite = matricule;
 
             MySqlCommand commande = new MySqlCommand();
 
             commande.Connection = con;
-            commande.CommandText = "SELECT * FROM adherent WHERE numero_identification = @matricule";
-            commande.Parameters.AddWithValue("@matricule", numero_identification);
+            commande.CommandText = "SELECT * FROM adherent WHERE id_activite = @matricule";
+            commande.Parameters.AddWithValue("@matricule", id_activite);
 
             con.Open();
 
@@ -481,10 +481,10 @@ namespace class2
 
             MySqlCommand commande = new MySqlCommand();
 
-            commande.Connection = con; 
+            commande.Connection = con;
             commande.CommandText = "UPDATE adherent " +
                 "SET nom = @nom, prenom = @prenom, adresse = @adresse, date_naissance = @dateNaissance, age = @age, role = @role " +
-                " WHERE numero_identification = @matricule";
+                " WHERE id_activite = @matricule";
             commande.Parameters.AddWithValue("@matricule", usager.NumeroIdentification);
             commande.Parameters.AddWithValue("@nom", usager.Nom);
             commande.Parameters.AddWithValue("@prenom", usager.Prenom);
@@ -514,7 +514,12 @@ namespace class2
         {
             try
             {
-                listeSeance.Clear();
+                if (listeSeance == null) // Vérifie si la liste est initialisée
+                {
+                    listeSeance = new ObservableCollection<Seance>();
+                }
+
+                listeSeance.Clear(); // Assurez-vous qu'elle est prête à être utilisée
                 MySqlCommand commande = new MySqlCommand("SELECT * FROM seance", con);
 
                 con.Open();
@@ -542,6 +547,7 @@ namespace class2
                 Debug.WriteLine("Erreur lors de l'affichage des séances : " + ex.Message);
             }
         }
+
 
         public ObservableCollection<Seance> GetSeancesByActivity(string activityCode)
         {
@@ -588,16 +594,395 @@ namespace class2
         {
             try
             {
-                MySqlCommand commande = new MySqlCommand("CALL verifier_conflit_horaire(@numeroAdherent, (SELECT date FROM seance WHERE id_seance = @idSeance), (SELECT heure FROM seance WHERE id_seance = @idSeance));", con);
-                commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
-                commande.Parameters.AddWithValue("@idSeance", idSeance);
+                // Récupérer la date et l'heure de la séance
+                DateTime dateSeance;
+                TimeSpan heureSeance;
+
+                using (var cmd = new MySqlCommand("SELECT date, heure FROM seance WHERE id_seance = @idSeance", con))
+                {
+                    cmd.Parameters.AddWithValue("@idSeance", idSeance);
+                    if (con.State == ConnectionState.Open)
+                    {
+                        con.Close();
+                    }
+                    con.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                        {
+                            throw new Exception("Séance introuvable.");
+                        }
+                        dateSeance = Convert.ToDateTime(reader["date"]);
+                        heureSeance = TimeSpan.Parse(reader["heure"].ToString());
+                    }
+                    con.Close();
+                }
+
+                // Vérification des conflits d'horaires
+                if (!VerifierConflitHoraire(numeroAdherent, dateSeance, heureSeance))
+                {
+                    Debug.WriteLine("Conflit d'horaire détecté pour l'utilisateur : " + numeroAdherent);
+                    return false;
+                }
+
+                // Ajouter l'inscription
+                using (var cmd = new MySqlCommand("INSERT INTO inscription (id_seance, numero_adherent) VALUES (@idSeance, @numeroAdherent)", con))
+                {
+                    cmd.Parameters.AddWithValue("@idSeance", idSeance);
+                    cmd.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
+                    if (con.State == ConnectionState.Open)
+                    {
+                        con.Close();
+                    }
+                    con.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    con.Close();
+
+                    return rowsAffected > 0;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur SQL : " + ex.Message);
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Erreur : " + ex.Message);
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                return false;
+            }
+        }
+
+
+        public bool VerifierConflitHoraire(string numeroAdherent, DateTime date, TimeSpan heure)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand
+                {
+                    Connection = con,
+                    CommandText = "verifier_conflit_horaire"
+                };
+                commande.CommandType = System.Data.CommandType.StoredProcedure;
+
+                // Ajout des paramètres
+                commande.Parameters.AddWithValue("@p_numero_adherent", numeroAdherent);
+                commande.Parameters.AddWithValue("@p_date", date);
+                commande.Parameters.AddWithValue("@p_heure", heure);
 
                 con.Open();
                 commande.ExecuteNonQuery();
                 con.Close();
 
-                // Insérer dans inscription après vérifications
-                commande = new MySqlCommand("INSERT INTO inscription (numero_adherent, id_seance) VALUES (@numeroAdherent, @idSeance)", con);
+                return true; // Aucun conflit détecté
+            }
+            catch (MySqlException ex)
+            {
+                con.Close();
+
+                // Vérifier si l'erreur vient de la procédure stockée
+                if (ex.Number == 1005)
+                {
+                    System.Diagnostics.Debug.WriteLine("Conflit d'horaire détecté : " + ex.Message);
+                    return false; // Conflit détecté
+                }
+
+                // Autres erreurs
+                System.Diagnostics.Debug.WriteLine("Erreur lors de la vérification du conflit d'horaire : " + ex.Message);
+                throw; // Relancer l'exception pour traitement ailleurs si nécessaire
+            }
+        }
+
+        public Seance ObtenirSeanceParId(int idSeance)
+        {
+            Seance seance = null;
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("SELECT * FROM seance WHERE id_seance = @id", con);
+                commande.Parameters.AddWithValue("@id", idSeance);
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    seance = new Seance
+                    {
+                        Id_seance = Convert.ToInt32(reader["id_seance"]),
+                        Numero_activite = reader["numero_activite"].ToString(),
+                        Date = Convert.ToDateTime(reader["date"]),
+                        Heure = TimeSpan.Parse(reader["heure"].ToString()),
+                        Place_dispo = reader["place_dispo"] != DBNull.Value ? (int?)Convert.ToInt32(reader["place_dispo"]) : null,
+                        Place_prise = Convert.ToInt32(reader["place_prise"]),
+                        Place_max = Convert.ToInt32(reader["place_max"])
+                    };
+                }
+
+                reader.Close();
+                con.Close();
+            }
+            catch (MySqlException ex)
+            {
+                con.Close();
+                Debug.WriteLine("Erreur lors de la récupération de la séance : " + ex.Message);
+            }
+
+            return seance;
+        }
+
+        public bool ModifierSeance(Seance seance)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(@"
+            UPDATE seance 
+            SET numero_activite = @numeroActivite, date = @date, heure = @heure, 
+                place_dispo = @placeDispo, place_prise = @placePrise, place_max = @placeMax
+            WHERE id_seance = @id", con);
+
+                commande.Parameters.AddWithValue("@numeroActivite", seance.Numero_activite);
+                commande.Parameters.AddWithValue("@date", seance.Date);
+                commande.Parameters.AddWithValue("@heure", seance.Heure);
+                commande.Parameters.AddWithValue("@placeDispo", seance.Place_dispo);
+                commande.Parameters.AddWithValue("@placePrise", seance.Place_prise);
+                commande.Parameters.AddWithValue("@placeMax", seance.Place_max);
+                commande.Parameters.AddWithValue("@id", seance.Id_seance);
+
+                con.Open();
+                int rowsAffected = commande.ExecuteNonQuery();
+                con.Close();
+
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de la modification de la séance : " + ex.Message);
+                con.Close();
+                return false;
+            }
+        }
+
+      
+        public ObservableCollection<Activite> ObtenirListeActivites()
+        {
+            try
+            {
+                if (listeActivite == null || listeActivite.Count == 0)
+                {
+                    afficherActivite(); // Charge les activités si la liste est vide
+                }
+                return listeActivite;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Erreur lors de l'obtention de la liste des activités : " + ex.Message);
+                return new ObservableCollection<Activite>();
+            }
+        }
+
+        public List<string> ObtenirNumeroActivites()
+        {
+            List<string> numeroActivites = new List<string>();
+
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("SELECT id_activite FROM activite", con);
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    // Ajout du nom de l'activité à la liste
+                    numeroActivites.Add(reader["id_activite"].ToString());
+                }
+
+                reader.Close();
+                con.Close();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de la récupération des noms des activités : " + ex.Message);
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+
+            return numeroActivites;
+        }
+
+        private void SupprimerInscriptionsParSeance(int idSeance)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("DELETE FROM inscription WHERE id_seance = @idSeance", con);
+                commande.Parameters.AddWithValue("@idSeance", idSeance);
+
+                con.Open();
+                commande.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de la suppression des inscriptions : " + ex.Message);
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
+        }
+
+        private bool VerifierInscriptionsPourSeance(int idSeance)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand("SELECT COUNT(*) FROM inscription WHERE id_seance = @idSeance", con);
+                commande.Parameters.AddWithValue("@idSeance", idSeance);
+
+                con.Open();
+                int count = Convert.ToInt32(commande.ExecuteScalar());
+                con.Close();
+
+                return count > 0;
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de la vérification des inscriptions : " + ex.Message);
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                return false;
+            }
+        }
+        public bool SupprimerSeance(int idSeance)
+        {
+            try
+            {
+                // Vérifiez si des inscriptions existent
+                if (VerifierInscriptionsPourSeance(idSeance))
+                {
+                    // Supprimez d'abord les inscriptions associées
+                    SupprimerInscriptionsParSeance(idSeance);
+                }
+
+                // Supprimez la séance
+                MySqlCommand commande = new MySqlCommand("DELETE FROM seance WHERE id_seance = @id", con);
+                commande.Parameters.AddWithValue("@id", idSeance);
+
+                con.Open();
+                int rowsAffected = commande.ExecuteNonQuery();
+                con.Close();
+
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de la suppression de la séance : " + ex.Message);
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                return false;
+            }
+        }
+        public bool VerifierSeanceExiste(Seance seance)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(
+                    "SELECT COUNT(*) FROM seance WHERE numero_activite = @numeroActivite AND date = @date AND heure = @heure", con);
+
+                commande.Parameters.AddWithValue("@numeroActivite", seance.Numero_activite);
+                commande.Parameters.AddWithValue("@date", seance.Date.ToString("yyyy-MM-dd"));
+                commande.Parameters.AddWithValue("@heure", seance.Heure.ToString(@"hh\:mm\:ss"));
+
+                con.Open();
+                int count = Convert.ToInt32(commande.ExecuteScalar());
+                con.Close();
+
+                // Retourne true si une séance existe déjà
+                return count > 0;
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de la vérification de la séance : " + ex.Message);
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
+                return false;
+            }
+        }
+
+        public bool AjouterSeance(Seance seance)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(@"
+            INSERT INTO seance (numero_activite, date, heure, place_dispo, place_prise, place_max)
+            VALUES (@numeroActivite, @date, @heure, @placeDispo, @placePrise, @placeMax)", con);
+
+                commande.Parameters.AddWithValue("@numeroActivite", seance.Numero_activite);
+                commande.Parameters.AddWithValue("@date", seance.Date);
+                commande.Parameters.AddWithValue("@heure", seance.Heure);
+                commande.Parameters.AddWithValue("@placeDispo", seance.Place_dispo);
+                commande.Parameters.AddWithValue("@placePrise", seance.Place_prise);
+                commande.Parameters.AddWithValue("@placeMax", seance.Place_max);
+
+                con.Open();
+                int rowsAffected = commande.ExecuteNonQuery();
+                con.Close();
+
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de l'ajout de la séance : " + ex.Message);
+                con.Close();
+                return false;
+            }
+        }
+
+        public bool VerifierInscriptionExiste(string numeroAdherent, int idSeance)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(
+                    "SELECT COUNT(*) FROM inscription WHERE numero_adherent = @numeroAdherent AND id_seance = @idSeance", con);
+
+                commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
+                commande.Parameters.AddWithValue("@idSeance", idSeance);
+
+                con.Open();
+                int count = Convert.ToInt32(commande.ExecuteScalar());
+                con.Close();
+
+                return count > 0; // Retourne true si l'inscription existe déjà
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de la vérification de l'inscription : " + ex.Message);
+                if (con.State == ConnectionState.Open) con.Close();
+                return false;
+            }
+        }
+        public bool AjouterInscription(string numeroAdherent, int idSeance)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(
+                    "INSERT INTO inscription (numero_adherent, id_seance) VALUES (@numeroAdherent, @idSeance)", con);
+
                 commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
                 commande.Parameters.AddWithValue("@idSeance", idSeance);
 
@@ -605,14 +990,96 @@ namespace class2
                 int rowsAffected = commande.ExecuteNonQuery();
                 con.Close();
 
-                return rowsAffected > 0; // Inscription réussie
+                return rowsAffected > 0; // Retourne true si l'insertion a réussi
             }
             catch (MySqlException ex)
             {
-                con.Close();
-                Debug.WriteLine("Erreur lors de l'inscription : " + ex.Message);
-                throw; // Relancer l'exception pour être gérée dans l'interface utilisateur
+                Debug.WriteLine("Erreur lors de l'ajout de l'inscription : " + ex.Message);
+                if (con.State == ConnectionState.Open) con.Close();
+                return false;
             }
         }
+        public bool ModifierInscription(string numeroAdherent, int idSeance)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(
+                    "UPDATE inscription SET id_seance = @idSeance WHERE numero_adherent = @numeroAdherent", con);
+
+                commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
+                commande.Parameters.AddWithValue("@idSeance", idSeance);
+
+                con.Open();
+                int rowsAffected = commande.ExecuteNonQuery();
+                con.Close();
+
+                return rowsAffected > 0; // Retourne true si la modification a réussi
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de la modification de l'inscription : " + ex.Message);
+                if (con.State == ConnectionState.Open) con.Close();
+                return false;
+            }
+        }
+        public bool SupprimerInscription(string numeroAdherent, int idSeance)
+        {
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(
+                    "DELETE FROM inscription WHERE numero_adherent = @numeroAdherent AND id_seance = @idSeance", con);
+
+                commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
+                commande.Parameters.AddWithValue("@idSeance", idSeance);
+
+                con.Open();
+                int rowsAffected = commande.ExecuteNonQuery();
+                con.Close();
+
+                return rowsAffected > 0; // Retourne true si la suppression a réussi
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de la suppression de l'inscription : " + ex.Message);
+                if (con.State == ConnectionState.Open) con.Close();
+                return false;
+            }
+        }
+        public ObservableCollection<Inscription> ObtenirListeInscriptions()
+        {
+            ObservableCollection<Inscription> listeInscriptions = new ObservableCollection<Inscription>();
+            try
+            {
+                MySqlCommand commande = new MySqlCommand(
+                    "SELECT numero_adherent, id_seance FROM inscription", con);
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Inscription inscription = new Inscription
+                    {
+                        Numero_adherent = reader["numero_adherent"].ToString(),
+                        Id_seance = Convert.ToInt32(reader["id_seance"])
+                    };
+                    listeInscriptions.Add(inscription);
+                }
+
+                reader.Close();
+                con.Close();
+            }
+            catch (MySqlException ex)
+            {
+                Debug.WriteLine("Erreur lors de l'obtention des inscriptions : " + ex.Message);
+                if (con.State == ConnectionState.Open) con.Close();
+            }
+
+            return listeInscriptions;
+        }
+
+
+
     }
+
 }

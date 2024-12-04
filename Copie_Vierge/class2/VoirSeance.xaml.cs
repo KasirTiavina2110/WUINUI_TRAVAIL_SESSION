@@ -27,31 +27,28 @@ namespace class2
             get { return _activityCode; }
             set
             {
-                _activityCode = value;
-                OnPropertyChanged(nameof(ActivityCode));
+                if (_activityCode != value) // Vérifie si la valeur a changé
+                {
+                    _activityCode = value;
+                    OnPropertyChanged(nameof(ActivityCode));
+                }
             }
         }
+
 
         // Propriétés pour InfoBar
-        private bool _isInfoBarVisible;
-        public bool IsInfoBarVisible
-        {
-            get { return _isInfoBarVisible; }
-            set
-            {
-                _isInfoBarVisible = value;
-                OnPropertyChanged(nameof(IsInfoBarVisible));
-            }
-        }
-
         private string _infoBarTitle;
         public string InfoBarTitle
         {
             get { return _infoBarTitle; }
             set
             {
-                _infoBarTitle = value;
-                OnPropertyChanged(nameof(InfoBarTitle));
+                if (_infoBarTitle != value)
+                {
+                    Debug.WriteLine($"InfoBarTitle changé : {_infoBarTitle} -> {value}");
+                    _infoBarTitle = value;
+                    OnPropertyChanged(nameof(InfoBarTitle));
+                }
             }
         }
 
@@ -61,10 +58,28 @@ namespace class2
             get { return _infoBarMessage; }
             set
             {
-                _infoBarMessage = value;
-                OnPropertyChanged(nameof(InfoBarMessage));
+                if (_infoBarMessage != value)
+                {
+                    _infoBarMessage = value;
+                    OnPropertyChanged(nameof(InfoBarMessage));
+                }
             }
         }
+
+        private bool _isInfoBarVisible;
+        public bool IsInfoBarVisible
+        {
+            get { return _isInfoBarVisible; }
+            set
+            {
+                if (_isInfoBarVisible != value)
+                {
+                    _isInfoBarVisible = value;
+                    OnPropertyChanged(nameof(IsInfoBarVisible));
+                }
+            }
+        }
+
 
         private InfoBarSeverity _infoBarSeverity;
         public InfoBarSeverity InfoBarSeverity
@@ -101,22 +116,36 @@ namespace class2
 
         private void LoadSeances()
         {
-            if (!string.IsNullOrEmpty(ActivityCode))
+            try
             {
-                Debug.WriteLine($"ActivityCode dans LoadSeances : {ActivityCode}");
-                SeanceList = Singleton.getInstance().GetSeancesByActivity(ActivityCode);
-
-                if (SeanceList.Count == 0)
+                if (!string.IsNullOrEmpty(ActivityCode))
                 {
-                    ShowErrorInfoBar("Aucune séance trouvée", $"Aucune séance n'a été trouvée pour l'activité : {ActivityCode}", InfoBarSeverity.Warning);
+                    Debug.WriteLine($"ActivityCode dans LoadSeances : {ActivityCode}");
+                    var seances = Singleton.getInstance().GetSeancesByActivity(ActivityCode);
+
+                    if (SeanceList != seances) // Évite de réaffecter la même collection
+                    {
+                        SeanceList = seances;
+
+                        if (SeanceList.Count == 0)
+                        {
+                            ShowErrorInfoBar("Aucune séance trouvée", $"Aucune séance n'a été trouvée pour l'activité : {ActivityCode}", InfoBarSeverity.Warning);
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine($"ActivityCode est vide ou null : '{ActivityCode}'");
+                    ShowErrorInfoBar("Paramètre Invalide", "Le code d'activité fourni est invalide.", InfoBarSeverity.Error);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Debug.WriteLine($"ActivityCode est vide ou null : '{ActivityCode}'");
-                ShowErrorInfoBar("Paramètre Invalide", "Le code d'activité fourni est invalide.", InfoBarSeverity.Error);
+                Debug.WriteLine($"Erreur dans LoadSeances : {ex.Message}");
+                ShowErrorInfoBar("Erreur", "Une erreur s'est produite lors du chargement des séances.", InfoBarSeverity.Error);
             }
         }
+
 
 
         private void SeanceListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -125,33 +154,30 @@ namespace class2
             {
                 var currentUser = SessionManager.Instance.UsagerConnecte;
 
-                if (currentUser != null)
+                if (currentUser != null && currentUser.Role.Equals("admin", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (currentUser.Role.Equals("admin", StringComparison.OrdinalIgnoreCase))
-                    {
-                        // Naviguer vers la page de modification de la séance
-                        this.Frame.Navigate(typeof(ModifierSeance), selectedSeance);
-                    }
-                    else if (currentUser.Role.Equals("adherent", StringComparison.OrdinalIgnoreCase))
-                    {
-                        // Naviguer vers la page d'inscription à une séance
-                        this.Frame.Navigate(typeof(Inscription), selectedSeance);
-                    }
-                    else
-                    {
-                        // Gérer les rôles inconnus ou non autorisés
-                        ShowErrorInfoBar("Accès Non Autorisé", "Votre rôle ne vous permet pas d'accéder à cette fonctionnalité.", InfoBarSeverity.Warning);
-                    }
+                    // Naviguer vers la page de modification de la séance si admin
+                    this.Frame.Navigate(typeof(ModifierSeance), selectedSeance);
                 }
                 else
                 {
-                    // Gérer le cas où l'utilisateur n'est pas connecté
-                    ShowErrorInfoBar("Utilisateur Non Connecté", "Veuillez vous connecter pour accéder à cette fonctionnalité.", InfoBarSeverity.Warning);
+                    // Si non-admin, ne fait rien (non-cliquable)
+                    Debug.WriteLine("L'élément n'est pas cliquable pour ce rôle.");
                 }
             }
         }
+        public bool IsAdmin
+        {
+            get
+            {
+                var currentUser = SessionManager.Instance.UsagerConnecte;
+                return currentUser != null && currentUser.Role.Equals("admin", StringComparison.OrdinalIgnoreCase);
+            }
+        }
 
-        
+
+
+
 
         // Gestionnaire d'événement pour fermer l'InfoBar
         private void ErrorInfoBar_Closed(InfoBar sender, InfoBarClosedEventArgs args)
@@ -168,23 +194,15 @@ namespace class2
                 {
                     string numeroAdherent = currentUser.NumeroIdentification;
 
-                    try
-                    {
-                        // Tenter l'inscription
-                        bool isInscriptionSuccessful = Singleton.getInstance().InscriptionSeance(idSeance, numeroAdherent);
+                    bool isInscriptionSuccessful = Singleton.getInstance().InscriptionSeance(idSeance, numeroAdherent);
 
-                        if (isInscriptionSuccessful)
-                        {
-                            ShowErrorInfoBar("Succès", "Vous êtes inscrit à la séance avec succès.", InfoBarSeverity.Success);
-                        }
-                        else
-                        {
-                            ShowErrorInfoBar("Erreur", "Impossible de vous inscrire à la séance.", InfoBarSeverity.Error);
-                        }
-                    }
-                    catch (MySqlException ex)
+                    if (isInscriptionSuccessful)
                     {
-                        HandleSqlException(ex);
+                        ShowErrorInfoBar("Succès", "Vous êtes inscrit à la séance avec succès.", InfoBarSeverity.Success);
+                    }
+                    else
+                    {
+                        ShowErrorInfoBar("Conflit d'Horaire", "Vous êtes déjà inscrit à une activité à ce créneau horaire.", InfoBarSeverity.Warning);
                     }
                 }
                 else
@@ -193,6 +211,7 @@ namespace class2
                 }
             }
         }
+
 
         // Gestion des erreurs SQL
         private void HandleSqlException(MySqlException ex)
@@ -213,16 +232,20 @@ namespace class2
                     break;
             }
         }
-    
+
 
         // Afficher l'InfoBar
         private void ShowErrorInfoBar(string title, string message, InfoBarSeverity severity)
         {
-            InfoBarTitle = title;
-            InfoBarMessage = message;
-            InfoBarSeverity = severity;
-            IsInfoBarVisible = true;
+            if (InfoBarTitle != title || InfoBarMessage != message || InfoBarSeverity != severity)
+            {
+                InfoBarTitle = title;
+                InfoBarMessage = message;
+                InfoBarSeverity = severity;
+                IsInfoBarVisible = true;
+            }
         }
+
 
 
 
@@ -233,6 +256,7 @@ namespace class2
         private void OnPropertyChanged(string propertyName) /*Important de ne pas oublier ça*/
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Debug.WriteLine($"OnPropertyChanged déclenché pour : {propertyName}");
         }
     }
 }

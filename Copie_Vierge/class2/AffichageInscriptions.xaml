@@ -1,0 +1,50 @@
+<Page
+    x:Class="class2.AffichageInscriptions"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:class2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <!-- InfoBar pour afficher les messages -->
+        <InfoBar x:Name="infoBar"
+                 IsOpen="False"
+                 Severity="Error"
+                 Title="Erreur"
+                 Message="Erreur lors du chargement des inscriptions." />
+
+        <ScrollViewer>
+            <StackPanel Margin="20">
+                <TextBlock Text="Liste des inscriptions" FontSize="24" FontWeight="Bold" Margin="0 0 0 20" />
+
+                <!-- ListView pour afficher les inscriptions -->
+                <ListView x:Name="listViewInscriptions"
+                          SelectionMode="Single"
+                          IsItemClickEnabled="True"
+                          ItemClick="listViewInscriptions_ItemClick"
+                          Margin="0 20 0 0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <TextBlock Text="Adhérent:" FontWeight="Bold" />
+                                <TextBlock Text="{Binding Numero_adherent}" />
+                                <TextBlock Text="| Séance:" FontWeight="Bold" />
+                                <TextBlock Text="{Binding Id_seance}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- Bouton pour modifier l'inscription sélectionnée -->
+                <Button x:Name="btnModifier"
+                        Content="Modifier"
+                        Click="btnModifier_Click"
+                        Width="200"
+                        Margin="0 20 0 0"
+                        HorizontalAlignment="Center" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

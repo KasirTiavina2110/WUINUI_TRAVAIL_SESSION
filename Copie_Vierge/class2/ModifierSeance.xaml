@@ -9,7 +9,83 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-    </Grid>
+            <!-- Header -->
+            <TextBlock
+                Text="Modifier une séance"
+                FontSize="25"
+                HorizontalAlignment="Center"
+                Margin="0,20,0,20"
+                TextDecorations="Underline" />
+
+            <!-- Formulaire -->
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Width="400" Spacing="15">
+                <!-- ID de la séance -->
+                <TextBox
+                    x:Name="id_seance"
+                    Header="ID de la séance"
+                    IsReadOnly="True"
+                    PlaceholderText="ID automatique"
+                    Margin="0,0,0,10" />
+
+                <!-- Numéro d'activité -->
+                <ComboBox
+                    x:Name="numero_activite"
+                    Header="Numéro de l'activité"
+                    PlaceholderText="Sélectionnez une activité">
+                </ComboBox>
+                <TextBlock x:Name="erreur_numero_activite" Foreground="Red" />
+
+                <!-- Date de la séance -->
+                <DatePicker
+                    x:Name="date"
+                    Header="Date de la séance" />
+                <TextBlock x:Name="erreur_date" Foreground="Red" />
+
+                <!-- Heure de la séance -->
+                <TimePicker
+                    x:Name="heure"
+                    Header="Heure de la séance" />
+                <TextBlock x:Name="erreur_heure" Foreground="Red" />
+
+                <!-- Places disponibles -->
+                <TextBox
+                    x:Name="place_dispo"
+                    Header="Places disponibles"
+                    PlaceholderText="Entrez le nombre de places disponibles"
+                    InputScope="Number" />
+                <TextBlock x:Name="erreur_place_dispo" Foreground="Red" />
+
+                <!-- Places prises -->
+                <TextBox
+                    x:Name="place_prise"
+                    Header="Places prises"
+                    PlaceholderText="Entrez le nombre de places prises"
+                    InputScope="Number" />
+                <TextBlock x:Name="erreur_place_prise" Foreground="Red" />
+
+                <!-- Places maximales -->
+                <TextBox
+                    x:Name="place_max"
+                    Header="Places maximales"
+                    PlaceholderText="Entrez le nombre maximal de places"
+                    InputScope="Number" />
+                <TextBlock x:Name="erreur_place_max" Foreground="Red" />
+
+                <!-- Boutons -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10" Margin="0,20,0,0">
+                    <Button x:Name="btn_modifier" Content="Modifier" Click="btn_modifier_Click" />
+                    <Button x:Name="btn_annuler" Content="Annuler" Click="btn_annuler_Click" />
+                    <Button x:Name="btn_supprimer" Content="Supprimer" Click="btn_supprimer_Click" />
+                </StackPanel>
+                <TextBlock x:Name="operation_reussie" Foreground="Green" />
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </Page>

@@ -41,7 +41,7 @@
 
             <!-- Liste des Séances -->
             <ListView ItemsSource="{Binding SeanceList}"
-                      IsItemClickEnabled="True"
+                      IsItemClickEnabled="{x:Bind IsAdmin}"
                       ItemClick="SeanceListView_ItemClick" >
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="local:Seance">

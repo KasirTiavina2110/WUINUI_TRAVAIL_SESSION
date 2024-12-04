@@ -56,12 +56,6 @@ namespace class2
                     case "ajouterSeance":
                         mainFrame.Navigate(typeof(AjouterSeance));
                         break;
-                    case "supprimerSeance":
-                        mainFrame.Navigate(typeof(SupprimerSeance));
-                        break;
-                    case "modifierSeance":
-                        mainFrame.Navigate(typeof(ModifierSeance));
-                        break;
                     case "voirStatistique":
                         mainFrame.Navigate(typeof(VoirStatistique));
                         break;
@@ -85,11 +79,32 @@ namespace class2
                     case "deconnexion":
                         await DeconnecterUsager();
                         break;
+
+                    // Gestion des inscriptions
+                    case "ajouterInscription":
+                        mainFrame.Navigate(typeof(AjouterInscription));
+                        break;
+                    case "modifierInscription":
+                        mainFrame.Navigate(typeof(ModifierInscription));
+                        break;
+                    case "obtenirListeInscription":
+                        mainFrame.Navigate(typeof(AffichageInscriptions));
+                        break;
                     default:
                         break;
                 }
             }
         }
+
+        // Gestion du clic sur le bouton "Retour"
+        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            if (mainFrame.CanGoBack)
+            {
+                mainFrame.GoBack();
+            }
+        }
+
 
         private void RedirigerSelonRole()
         {

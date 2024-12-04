@@ -13,11 +13,11 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="AffichageActivite.xaml" />
+    <None Remove="AffichageInscriptions.xaml" />
     <None Remove="AffichageSeance.xaml" />
     <None Remove="AjouterActivite.xaml" />
     <None Remove="AjouterSeance.xaml" />
     <None Remove="AjouterUsager.xaml" />
-    <None Remove="Inscription.xaml" />
     <None Remove="ModalConnexion.xaml" />
     <None Remove="ModifierActivite.xaml" />
     <None Remove="ModifierActivitePage.xaml" />
@@ -57,7 +57,7 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Inscription.xaml">
+    <Page Update="AffichageInscriptions.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

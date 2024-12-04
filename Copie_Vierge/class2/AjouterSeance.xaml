@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="class2.AjouterSeance"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -6,13 +5,54 @@
     xmlns:local="using:class2"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
     <Grid>
+        <!-- InfoBar pour afficher les messages d'erreur -->
+        <InfoBar x:Name="infoBar"
+                 IsOpen="False"
+                 Severity="Error"
+                 Title="Erreur"
+                 Message="Les informations saisies existent déjà ou sont invalides." />
 
-  
-        
-      
+        <ScrollViewer>
+            <StackPanel Margin="20">
+                <TextBlock Text="Ajouter une séance" FontSize="24" FontWeight="Bold" Margin="0 0 0 20" />
+
+                <!-- ComboBox pour numero_activite -->
+                <TextBlock Text="Activité" />
+                <ComboBox x:Name="comboNumeroActivite"
+                          PlaceholderText="Sélectionnez une activité"
+                          Width="300" />
+
+                <!-- Date -->
+                <TextBlock Text="Date" Margin="0 20 0 0" />
+                <DatePicker x:Name="datePicker" Width="300" />
+
+                <!-- Heure -->
+                <TextBlock Text="Heure" Margin="0 20 0 0" />
+                <TimePicker x:Name="timePicker" Width="300" />
+
+                <!-- Places disponibles -->
+                <TextBlock Text="Places disponibles" Margin="0 20 0 0" />
+                <TextBox x:Name="txtPlaceDispo" PlaceholderText="Nombre de places disponibles" Width="300" />
+
+                <!-- Places prises -->
+                <TextBlock Text="Places prises" Margin="0 20 0 0" />
+                <TextBox x:Name="txtPlacePrise" PlaceholderText="Nombre de places prises" Width="300" />
+
+                <!-- Places maximales -->
+                <TextBlock Text="Places maximales" Margin="0 20 0 0" />
+                <TextBox x:Name="txtPlaceMax" PlaceholderText="Nombre de places maximales" Width="300" />
+
+                <!-- Bouton Ajouter -->
+                <Button x:Name="btnAjouter"
+                        Content="Ajouter"
+                        Click="btnAjouter_Click"
+                        Margin="0 30 0 0"
+                        Width="200"
+                        HorizontalAlignment="Center" />
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
