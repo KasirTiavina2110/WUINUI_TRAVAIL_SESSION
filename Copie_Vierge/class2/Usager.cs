@@ -147,7 +147,7 @@ namespace class2
         {
             get
             {
-                return $"{NumeroIdentification} - {Prenom} {Nom} - {Age} ans ";
+                return $"{NumeroIdentification}, {Prenom} {Nom}, {Age} ans ";
             }
         }
 

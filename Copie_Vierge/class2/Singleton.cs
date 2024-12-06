@@ -71,9 +71,9 @@ namespace class2
                 {
                     Usager usager = new Usager
                     {
-                        NumeroIdentification = reader["id_activite"].ToString(),
-                        Nom = reader["Nom"].ToString(),
-                        Prenom = reader["Prenom"].ToString(),
+                        NumeroIdentification = reader["numero_identification"].ToString(),
+                        Nom = reader["nom"].ToString(),
+                        Prenom = reader["prenom"].ToString(),
                         Age = Convert.ToInt32(reader["age"])
                     };
 
