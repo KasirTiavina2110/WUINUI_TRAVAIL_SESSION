@@ -64,6 +64,7 @@
                             <x:String>Culinaire</x:String>
                             <x:String>Scientifique</x:String>
                             <x:String>Sportif</x:String>
+                            <x:String>Gastronomique</x:String>
                         </ComboBox>
                         <TextBlock Name="erreur_choix_type" Foreground="Red" />
                     </StackPanel>
