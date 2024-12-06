@@ -19,7 +19,7 @@
         <TextBox
             x:Name="matricule"
             Header="Matricule"
-            PlaceholderText="Exemple : AD-1995-874"
+            PlaceholderText="Exemple : AD-1995-932"
             Margin="0 10 0 0" />
         <TextBlock
             x:Name="erreur_matricule"

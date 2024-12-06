@@ -71,7 +71,7 @@ namespace class2
                 {
                     Usager usager = new Usager
                     {
-                        NumeroIdentification = reader["id_activite"].ToString(),
+                        NumeroIdentification = reader["numero_identification"].ToString(),
                         Nom = reader["Nom"].ToString(),
                         Prenom = reader["Prenom"].ToString(),
                         Age = Convert.ToInt32(reader["age"])
@@ -85,7 +85,8 @@ namespace class2
             }
             catch (Exception ex)
             {
-                // Gérez les exceptions ici
+                // Déboguer l'exception
+                Debug.WriteLine($"Erreur lors de la récupération des adhérents : {ex.Message}");
                 if (con.State == ConnectionState.Open)
                 {
                     con.Close();
@@ -94,6 +95,7 @@ namespace class2
 
             return listeAdherents;
         }
+
 
 
 
@@ -973,7 +975,7 @@ namespace class2
             }
             catch (MySqlException ex)
             {
-                Debug.WriteLine("Erreur lors de la vérification de l'inscription : " + ex.Message);
+              //  Debug.WriteLine("Erreur lors de la vérification de l'inscription : " + ex.Message);
                 con.Close();
                 return false;
             }
@@ -1000,21 +1002,23 @@ namespace class2
             }
             catch (MySqlException ex)
             {
-                Debug.WriteLine("Erreur lors de l'ajout de l'inscription : " + ex.Message);
+              //  Debug.WriteLine("Erreur lors de l'ajout de l'inscription : " + ex.Message);
                 con.Close();
                 return false;
             }
         }
 
-        public bool ModifierInscription(string numeroAdherent, int idSeance)
+        public bool ModifierInscription(int idInscription, string numeroAdherent, int idSeance, DateTime dateInscription)
         {
             try
             {
                 MySqlCommand commande = new MySqlCommand(
-                    "UPDATE inscription SET id_seance = @idSeance WHERE numero_adherent = @numeroAdherent", con);
+                    "UPDATE inscription SET id_seance = @idSeance, date_inscription = @dateInscription WHERE id_inscription = @idInscription AND numero_adherent = @numeroAdherent", con);
 
+                commande.Parameters.AddWithValue("@idInscription", idInscription); // Ajoutez l'id de l'inscription
                 commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
                 commande.Parameters.AddWithValue("@idSeance", idSeance);
+                commande.Parameters.AddWithValue("@dateInscription", dateInscription); // Paramètre pour la date
 
                 con.Open();
                 int rowsAffected = commande.ExecuteNonQuery();
@@ -1024,34 +1028,32 @@ namespace class2
             }
             catch (MySqlException ex)
             {
-                Debug.WriteLine("Erreur lors de la modification de l'inscription : " + ex.Message);
+                // Debug.WriteLine("Erreur lors de la modification de l'inscription : " + ex.Message);
                 if (con.State == ConnectionState.Open) con.Close();
                 return false;
             }
         }
-        public bool SupprimerInscription(string numeroAdherent, int idSeance)
+
+        public bool SupprimerInscription(int idInscription)
         {
             try
             {
-                MySqlCommand commande = new MySqlCommand(
-                    "DELETE FROM inscription WHERE numero_adherent = @numeroAdherent AND id_seance = @idSeance", con);
-
-                commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
-                commande.Parameters.AddWithValue("@idSeance", idSeance);
+                MySqlCommand command = new MySqlCommand("DELETE FROM inscription WHERE id_inscription = @idInscription", con);
+                command.Parameters.AddWithValue("@idInscription", idInscription);
 
                 con.Open();
-                int rowsAffected = commande.ExecuteNonQuery();
+                int rowsAffected = command.ExecuteNonQuery();
                 con.Close();
 
-                return rowsAffected > 0; // Retourne true si la suppression a réussi
+                return rowsAffected > 0;
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine("Erreur lors de la suppression de l'inscription : " + ex.Message);
-                if (con.State == ConnectionState.Open) con.Close();
+                Debug.WriteLine($"Erreur lors de la suppression de l'inscription : {ex.Message}");
                 return false;
             }
         }
+
         public ObservableCollection<Inscription> ObtenirListeInscriptions()
         {
             ObservableCollection<Inscription> listeInscriptions = new ObservableCollection<Inscription>();
@@ -1078,15 +1080,40 @@ namespace class2
             }
             catch (MySqlException ex)
             {
-                Debug.WriteLine("Erreur lors de l'obtention des inscriptions : " + ex.Message);
+                //   Debug.WriteLine("Erreur lors de l'obtention des inscriptions : " + ex.Message);
                 if (con.State == ConnectionState.Open) con.Close();
             }
 
             return listeInscriptions;
         }
+        public List<Inscription> GetListeInscriptions()
+        {
+            List<Inscription> inscriptions = new List<Inscription>();
+            try
+            {
+                MySqlCommand command = new MySqlCommand("SELECT * FROM inscription", con);
+                con.Open();
+                MySqlDataReader reader = command.ExecuteReader();
 
-
-
+                while (reader.Read())
+                {
+                    inscriptions.Add(new Inscription
+                    {
+                        Id_inscription = reader.GetInt32("id_inscription"),
+                        Numero_adherent = reader.GetString("numero_adherent"),
+                        Id_seance = reader.GetInt32("id_seance"),
+                        Date_inscription = reader.GetDateTime("date_inscription")
+                    });
+                }
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Erreur lors de la récupération des inscriptions : {ex.Message}");
+            }
+            return inscriptions;
+        }
     }
+
 
 }

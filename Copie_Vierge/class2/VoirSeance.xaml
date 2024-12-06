@@ -23,15 +23,16 @@
         <StackPanel>
             <!-- InfoBar pour afficher les messages d'erreur -->
             <InfoBar
-                x:Name="ErrorInfoBar"
-                IsOpen="{x:Bind IsInfoBarVisible, Mode=TwoWay}"
-                Severity="{x:Bind InfoBarSeverity, Mode=TwoWay}"
-                Title="{x:Bind InfoBarTitle, Mode=TwoWay}"
-                Message="{x:Bind InfoBarMessage, Mode=TwoWay}"
-                IsClosable="True"
-                Margin="0,0,0,20"
-                HorizontalAlignment="Stretch">
+    x:Name="ErrorInfoBar"
+    IsOpen="{Binding IsInfoBarVisible, Mode=TwoWay}"
+    Severity="{Binding InfoBarSeverity, Mode=TwoWay}"
+    Title="{Binding InfoBarTitle, Mode=TwoWay}"
+    Message="{Binding InfoBarMessage, Mode=TwoWay}"
+    IsClosable="True"
+    Margin="0,0,0,20"
+    HorizontalAlignment="Stretch">
             </InfoBar>
+
 
             <!-- Afficher le Code de l'Activité -->
             <TextBlock FontSize="20" FontWeight="Bold" Margin="0,0,0,20">

@@ -17,34 +17,53 @@
 
         <ScrollViewer>
             <StackPanel Margin="20">
-                <TextBlock Text="Modifier une inscription" FontSize="24" FontWeight="Bold" Margin="0 0 0 20" />
+                <TextBlock Text="Liste des Inscriptions" FontSize="24" FontWeight="Bold" Margin="0 0 0 20" />
 
-                <!-- ComboBox pour numero_identification -->
-                <TextBlock Text="Adhérent" />
-                <ComboBox x:Name="comboNumeroIdentification"
-                          PlaceholderText="Sélectionnez un adhérent"
-                          Width="300" />
+                <!-- ListView pour afficher les inscriptions -->
+                <ListView x:Name="listViewInscriptions" 
+                          SelectionMode="Single" 
+                          ItemClick="ListViewInscriptions_ItemClick">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Inscription">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Numero_adherent}" />
+                                <TextBlock Text="{Binding Id_seance}" />
+                                <TextBlock Text="{Binding Date_inscription}" />
+                                <!-- Icone delete -->
+                                <Button Content="Delete" 
+                                        HorizontalAlignment="Right" 
+                                        Click="DeleteButton_Click" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
 
-                <!-- ComboBox pour id_seance -->
-                <TextBlock Text="Séance" Margin="0 20 0 0" />
-                <ComboBox x:Name="comboIdSeance"
-                          PlaceholderText="Sélectionnez une séance"
-                          Width="300" />
+                <!-- Formulaire de modification de l'inscription -->
+                <StackPanel x:Name="formPanel" Visibility="Collapsed" Margin="20">
+                    <TextBlock Text="Modifier l'inscription" FontSize="20" FontWeight="Bold" Margin="0 0 0 20" />
 
-                <!-- Boutons Modifier, Annuler et Supprimer -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 30 0 0">
-                    <Button x:Name="btnModifier"
-                            Content="Modifier"
-                            Click="btnModifier_Click"
-                            Width="100" Margin="10" />
-                    <Button x:Name="btnAnnuler"
-                            Content="Annuler"
-                            Click="btnAnnuler_Click"
-                            Width="100" Margin="10" />
-                    <Button x:Name="btnSupprimer"
-                            Content="Supprimer"
-                            Click="btnSupprimer_Click"
-                            Width="100" Margin="10" />
+                    <!-- ComboBox pour numero_identification -->
+                    <TextBlock Text="Adhérent" />
+                    <ComboBox x:Name="comboNumeroIdentification" 
+                              Width="300" 
+                              PlaceholderText="Sélectionnez un adhérent" />
+
+                    <!-- ComboBox pour id_seance -->
+                    <TextBlock Text="Séance" Margin="0 20 0 0" />
+                    <ComboBox x:Name="comboIdSeance" 
+                              Width="300" 
+                              PlaceholderText="Sélectionnez une séance" />
+
+                    <!-- DatePicker pour la date d'inscription -->
+                    <TextBlock Text="Date d'Inscription" Margin="0 20 0 0" />
+                    <DatePicker x:Name="datePickerInscription" 
+                                Width="300" />
+
+                    <!-- Boutons Modifier, Annuler -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 30 0 0">
+                        <Button x:Name="btnModifier" Content="Modifier" Click="btnModifier_Click" Width="100" Margin="10" />
+                        <Button x:Name="btnAnnuler" Content="Annuler" Click="btnAnnuler_Click" Width="100" Margin="10" />
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

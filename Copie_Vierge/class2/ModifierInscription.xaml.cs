@@ -2,6 +2,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace class2
 {
@@ -14,24 +16,26 @@ namespace class2
             this.InitializeComponent();
         }
 
-        // Charger la liste des numero_identification et id_seance dans les ComboBox
-        private void ChargerAdherentsEtSeances()
+        // Charger la liste des inscriptions
+        private void ChargerInscriptions()
         {
             try
             {
-                var adherents = Singleton.getInstance().GetListeAdherents();
-                comboNumeroIdentification.ItemsSource = adherents;
-                comboNumeroIdentification.DisplayMemberPath = "NumeroIdentification";
-                comboNumeroIdentification.SelectedValuePath = "NumeroIdentification";
+                var inscriptions = Singleton.getInstance().GetListeInscriptions();
 
-                var seances = Singleton.getInstance().getListeSeance();
-                comboIdSeance.ItemsSource = seances;
-                comboIdSeance.DisplayMemberPath = "Id_seance";
-                comboIdSeance.SelectedValuePath = "Id_seance";
+                if (inscriptions == null || !inscriptions.Any())
+                {
+                    infoBar.Message = "Aucune inscription trouvée.";
+                    infoBar.IsOpen = true;
+                }
+                else
+                {
+                    listViewInscriptions.ItemsSource = inscriptions;
+                }
             }
             catch (Exception ex)
             {
-                infoBar.Message = $"Erreur lors du chargement des adhérents et des séances : {ex.Message}";
+                infoBar.Message = $"Erreur lors du chargement des inscriptions : {ex.Message}";
                 infoBar.IsOpen = true;
             }
         }
@@ -39,25 +43,50 @@ namespace class2
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.Parameter is Inscription inscription)
-            {
-                inscriptionActuelle = inscription;
-                ChargerAdherentsEtSeances();
-                RemplirChamps();
-            }
+            ChargerInscriptions();  // Charger toutes les inscriptions
         }
 
-        // Remplir les champs avec les informations actuelles de l'inscription
-        private void RemplirChamps()
+        // Sélectionner une inscription dans la liste
+        private void ListViewInscriptions_ItemClick(object sender, ItemClickEventArgs e)
         {
+            inscriptionActuelle = e.ClickedItem as Inscription;
             if (inscriptionActuelle != null)
             {
+                // Afficher le formulaire avec les données de l'inscription
+                formPanel.Visibility = Visibility.Visible;
+
+                // Charger les adhérents et les séances
+                ChargerAdherentsEtSeances();
+
+                // Remplir les champs du formulaire
                 comboNumeroIdentification.SelectedValue = inscriptionActuelle.Numero_adherent;
                 comboIdSeance.SelectedValue = inscriptionActuelle.Id_seance;
+                datePickerInscription.SelectedDate = inscriptionActuelle.Date_inscription;  // Utilisation directe de DateTime
+            }
+            else
+            {
+                // Ajout d'un message d'erreur ou d'une gestion si l'élément n'est pas valide
+                infoBar.Message = "L'élément sélectionné est invalide.";
+                infoBar.IsOpen = true;
             }
         }
 
-        // Bouton Modifier
+        // Charger les adhérents et les séances
+        private void ChargerAdherentsEtSeances()
+        {
+            var adherents = Singleton.getInstance().GetListeAdherents();
+            var seances = Singleton.getInstance().getListeSeance();
+
+            comboNumeroIdentification.ItemsSource = adherents;
+            comboNumeroIdentification.DisplayMemberPath = "Nom";  // Afficher le nom dans le ComboBox
+            comboNumeroIdentification.SelectedValuePath = "NumeroIdentification";
+
+            comboIdSeance.ItemsSource = seances;
+            comboIdSeance.DisplayMemberPath = "Numero_activite";  // Afficher l'activité dans le ComboBox
+            comboIdSeance.SelectedValuePath = "Id_seance";
+        }
+
+        // Modifier l'inscription
         private void btnModifier_Click(object sender, RoutedEventArgs e)
         {
             if (!ValiderChamps())
@@ -69,19 +98,17 @@ namespace class2
             string numeroAdherent = comboNumeroIdentification.SelectedValue.ToString();
             int idSeance = (int)comboIdSeance.SelectedValue;
 
-            // Vérifier si l'inscription existe déjà (autre que l'actuelle)
-            if (Singleton.getInstance().VerifierInscriptionExiste(numeroAdherent, idSeance) &&
-                (numeroAdherent != inscriptionActuelle.Numero_adherent || idSeance != inscriptionActuelle.Id_seance))
-            {
-                infoBar.Message = "Une inscription avec ces informations existe déjà.";
-                infoBar.IsOpen = true;
-                return;
-            }
+            // Obtenir la date de l'inscription, ou utiliser DateTime.Now si la date est vide
+            DateTime dateInscription = datePickerInscription.SelectedDate?.DateTime ?? DateTime.Now;
 
-            // Modifier l'inscription dans la base de données
-            if (Singleton.getInstance().ModifierInscription(numeroAdherent, idSeance))
+            // Appeler la méthode ModifierInscription avec tous les paramètres nécessaires
+            if (Singleton.getInstance().ModifierInscription(inscriptionActuelle.Id_inscription, numeroAdherent, idSeance, dateInscription))
             {
-                Frame.Navigate(typeof(AffichageInscriptions)); // Rediriger vers la liste des inscriptions
+                infoBar.Message = "Inscription modifiée avec succès.";
+                infoBar.Severity = InfoBarSeverity.Success;
+                infoBar.IsOpen = true;
+                ChargerInscriptions(); // Recharger la liste des inscriptions
+                formPanel.Visibility = Visibility.Collapsed; // Masquer le formulaire
             }
             else
             {
@@ -90,44 +117,41 @@ namespace class2
             }
         }
 
-        // Bouton Supprimer
-        private void btnSupprimer_Click(object sender, RoutedEventArgs e)
+        // Annuler et masquer le formulaire
+        private void btnAnnuler_Click(object sender, RoutedEventArgs e)
         {
-            if (inscriptionActuelle != null)
+            formPanel.Visibility = Visibility.Collapsed; // Masquer le formulaire
+        }
+
+        // Supprimer l'inscription
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var inscription = button?.DataContext as Inscription;
+
+            if (inscription != null && Singleton.getInstance().SupprimerInscription(inscription.Id_inscription))
             {
-                if (Singleton.getInstance().SupprimerInscription(inscriptionActuelle.Numero_adherent, inscriptionActuelle.Id_seance))
-                {
-                    Frame.Navigate(typeof(AffichageInscriptions)); // Rediriger après suppression
-                }
-                else
-                {
-                    infoBar.Message = "Erreur lors de la suppression de l'inscription.";
-                    infoBar.IsOpen = true;
-                }
+                infoBar.Message = "Inscription supprimée avec succès.";
+                infoBar.Severity = InfoBarSeverity.Success;
+                infoBar.IsOpen = true;
+                ChargerInscriptions(); // Recharger la liste des inscriptions
             }
             else
             {
-                infoBar.Message = "Impossible de supprimer l'inscription actuelle.";
+                infoBar.Message = "Erreur lors de la suppression de l'inscription.";
                 infoBar.IsOpen = true;
             }
-        }
-
-        // Bouton Annuler
-        private void btnAnnuler_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.GoBack(); // Retourner à la page précédente
         }
 
         // Validation des champs
         private bool ValiderChamps()
         {
-            infoBar.IsOpen = false;
-
             if (comboNumeroIdentification.SelectedValue == null)
             {
                 infoBar.Message = "Veuillez sélectionner un adhérent.";
                 return false;
             }
+
             if (comboIdSeance.SelectedValue == null)
             {
                 infoBar.Message = "Veuillez sélectionner une séance.";

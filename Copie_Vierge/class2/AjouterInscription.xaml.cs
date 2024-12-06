@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Diagnostics;
 
 namespace class2
 {
@@ -18,11 +19,23 @@ namespace class2
         {
             try
             {
+                // Charger les adhérents
                 var adherents = Singleton.getInstance().GetListeAdherents();
-                comboNumeroIdentification.ItemsSource = adherents;
-                comboNumeroIdentification.DisplayMemberPath = "NumeroIdentification";
-                comboNumeroIdentification.SelectedValuePath = "NumeroIdentification";
 
+                if (adherents == null || adherents.Count == 0)
+                {
+                    infoBar.Message = "Aucun adhérent trouvé.";
+                    infoBar.IsOpen = true;
+                }
+                else
+                {
+                    comboNumeroIdentification.ItemsSource = adherents;
+                    Debug.WriteLine($"Nombre d'adhérents récupérés : {adherents.Count}");
+                    comboNumeroIdentification.DisplayMemberPath = "NumeroIdentification";
+                    comboNumeroIdentification.SelectedValuePath = "NumeroIdentification";
+                }
+
+                // Charger les séances
                 var seances = Singleton.getInstance().getListeSeance();
                 comboIdSeance.ItemsSource = seances;
                 comboIdSeance.DisplayMemberPath = "Id_seance";
@@ -34,6 +47,7 @@ namespace class2
                 infoBar.IsOpen = true;
             }
         }
+
 
         // Initialiser la date et l'heure d'inscription
         private void InitialiserDateEtHeureInscription()

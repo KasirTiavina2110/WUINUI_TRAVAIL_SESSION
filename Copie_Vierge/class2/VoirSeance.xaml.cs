@@ -45,7 +45,7 @@ namespace class2
             {
                 if (_infoBarTitle != value)
                 {
-                    Debug.WriteLine($"InfoBarTitle changé : {_infoBarTitle} -> {value}");
+                   // Debug.WriteLine($"InfoBarTitle changé : {_infoBarTitle} -> {value}");
                     _infoBarTitle = value;
                     OnPropertyChanged(nameof(InfoBarTitle));
                 }
@@ -194,61 +194,95 @@ namespace class2
                 {
                     string numeroAdherent = currentUser.NumeroIdentification;
 
-                    bool isInscriptionSuccessful = Singleton.getInstance().InscriptionSeance(idSeance, numeroAdherent);
+                    try
+                    {
+                        // Vérifier d'abord si l'utilisateur est déjà inscrit à cette séance
+                        bool inscriptionExiste = Singleton.getInstance().VerifierInscriptionExiste(numeroAdherent, idSeance);
 
-                    if (isInscriptionSuccessful)
-                    {
-                        ShowErrorInfoBar("Succès", "Vous êtes inscrit à la séance avec succès.", InfoBarSeverity.Success);
+                        if (inscriptionExiste)
+                        {
+                            // Naviguer vers MessagePage avec un message d'erreur
+                            this.Frame.Navigate(typeof(MessagePage), new Tuple<string, string>("Conflit d'Horaire", "Vous êtes déjà inscrit à une activité à ce créneau horaire."));
+                            return;
+                        }
+
+                        // Si l'inscription n'existe pas, on tente d'ajouter l'inscription
+                        bool isInscriptionSuccessful = Singleton.getInstance().AjouterInscription(new Inscription
+                        {
+                            Numero_adherent = numeroAdherent,
+                            Id_seance = idSeance,
+                            Date_inscription = DateTime.Now
+                        });
+
+                        if (isInscriptionSuccessful)
+                        {
+                            // Naviguer vers MessagePage avec un message de succès
+                            this.Frame.Navigate(typeof(MessagePage), new Tuple<string, string>("Succès", "Vous êtes inscrit à la séance avec succès."));
+                        }
+                        else
+                        {
+                            // Naviguer vers MessagePage avec un message d'erreur générique
+                            this.Frame.Navigate(typeof(MessagePage), new Tuple<string, string>("Erreur", "L'inscription a échoué pour une raison inconnue."));
+                        }
                     }
-                    else
+                    catch (MySqlException ex)
                     {
-                        ShowErrorInfoBar("Conflit d'Horaire", "Vous êtes déjà inscrit à une activité à ce créneau horaire.", InfoBarSeverity.Warning);
+                        // Gestion des erreurs SQL spécifiques
+                        HandleSqlException(ex);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Capture d'autres exceptions générales
+                        Debug.WriteLine($"Erreur inattendue : {ex.Message}");
+                        this.Frame.Navigate(typeof(MessagePage), new Tuple<string, string>("Erreur", "Une erreur s'est produite lors de l'inscription."));
                     }
                 }
                 else
                 {
-                    ShowErrorInfoBar("Accès Non Autorisé", "Vous devez être connecté en tant qu'adhérent pour vous inscrire.", InfoBarSeverity.Warning);
+                    this.Frame.Navigate(typeof(MessagePage), new Tuple<string, string>("Accès Non Autorisé", "Vous devez être connecté en tant qu'adhérent pour vous inscrire."));
                 }
             }
         }
+
+
+
 
 
         // Gestion des erreurs SQL
         private void HandleSqlException(MySqlException ex)
         {
-            switch (ex.Number)
+            string errorMessage = ex.Message;
+
+            // Si vous avez des codes d'erreur spécifiques
+            if (ex.Number == 1062) // Violation de clé unique
             {
-                case 1002: // Conflit d'inscription
-                    ShowErrorInfoBar("Conflit d'Inscription", "Vous êtes déjà inscrit à cette séance.", InfoBarSeverity.Warning);
-                    break;
-                case 1003: // Places complètes
-                    ShowErrorInfoBar("Places Complètes", "Toutes les places pour cette séance sont prises.", InfoBarSeverity.Warning);
-                    break;
-                case 1005: // Conflit horaire
-                    ShowErrorInfoBar("Conflit d'Horaires", "Vous êtes déjà inscrit à une activité à ce créneau horaire.", InfoBarSeverity.Warning);
-                    break;
-                default:
-                    ShowErrorInfoBar("Erreur Inconnue", ex.Message, InfoBarSeverity.Error);
-                    break;
+                errorMessage = "Vous êtes déjà inscrit à cette séance.";
             }
+            else if (ex.Number == 1452) // Conflit de clé étrangère
+            {
+                errorMessage = "La séance est complète.";
+            }
+
+            // Naviguer vers MessagePage avec le message d'erreur
+            this.Frame.Navigate(typeof(MessagePage), new Tuple<string, string>("Erreur SQL", errorMessage));
         }
+
+
 
 
         // Afficher l'InfoBar
         private void ShowErrorInfoBar(string title, string message, InfoBarSeverity severity)
         {
-            if (InfoBarTitle != title || InfoBarMessage != message || InfoBarSeverity != severity)
+            if (_infoBarTitle != title || _infoBarMessage != message || _infoBarSeverity != severity)
             {
                 _infoBarTitle = title;
                 _infoBarMessage = message;
                 _infoBarSeverity = severity;
                 _isInfoBarVisible = true;
+
+                // Ne pas appeler OnPropertyChanged pour éviter un cycle infini
             }
         }
-
-
-
-
 
         // Implémentation de INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
