@@ -107,7 +107,7 @@ namespace class2
                 FontWeight = FontWeights.Bold,
                 TextDecorations = TextDecorations.Underline,
                 FontSize = 25,
-                Text = "Le nombre d'adhérent par séance"
+                Text = "La note moyenne"
             };
 
             stk_note_parent.Children.Add(header);

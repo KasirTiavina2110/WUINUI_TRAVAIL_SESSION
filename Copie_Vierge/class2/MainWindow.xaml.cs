@@ -65,6 +65,20 @@ namespace class2
                     case "exporterCsvActivite":
                         await ExporterCsvActivite();
                         break;
+                    case "mesSeances":
+
+                        var currentUser = SessionManager.Instance.UsagerConnecte;
+
+                        if (currentUser != null)
+                        {
+                            mainFrame.Navigate(typeof(VoirMesSeances));
+                        }
+                        else
+                        {
+                            mainFrame.Navigate(typeof(AffichageActivite));
+
+                        }
+                        break;
                     case "connexion":
                         var modalConnexion = new ModalConnexion();
                         modalConnexion.XamlRoot = navView.XamlRoot;

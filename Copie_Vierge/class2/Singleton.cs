@@ -22,6 +22,8 @@ namespace class2
         ObservableCollection<Activite> listeActivite;
         ObservableCollection<Usager> listeUsager;
         private ObservableCollection<Seance> listeSeance;
+        ObservableCollection<Inscription> listeInscription;
+
 
         public static Singleton instance = null;
 
@@ -512,6 +514,13 @@ namespace class2
             return listeSeance;
         }
 
+        public ObservableCollection<Inscription> GetListeMesSeance()
+        {
+            afficherMesSeances();
+            return listeInscription;
+        }
+
+
         private void affichageSeance()
         {
             try
@@ -548,6 +557,88 @@ namespace class2
                 con.Close();
                 Debug.WriteLine("Erreur lors de l'affichage des séances : " + ex.Message);
             }
+        }
+
+
+        private void afficherMesSeances()
+        {
+
+            try
+            {
+                if (listeInscription == null) // Vérifie si la liste est initialisée
+                {
+                    listeInscription = new ObservableCollection<Inscription>();
+                }
+
+                var currentUser = SessionManager.Instance.UsagerConnecte;
+
+                var numero = currentUser.NumeroIdentification;
+
+                listeInscription.Clear(); // Assurez-vous qu'elle est prête à être utilisée
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "SELECT * FROM inscription WHERE numero_adherent = @numero";
+                commande.Parameters.AddWithValue("@numero", numero);
+
+                con.Open();
+                MySqlDataReader reader = commande.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Inscription inscription = new Inscription
+                    {
+
+                        Id_inscription = Convert.ToInt32(reader["id_inscription"]),
+                        Numero_adherent = reader["numero_adherent"].ToString(),
+                        Id_seance = Convert.ToInt32(reader["id_seance"]),
+                        Date_inscription = Convert.ToDateTime(reader["date_inscription"])
+                       
+                    };
+
+                    listeInscription.Add(inscription);
+
+                }
+                reader.Close();
+                con.Close();
+            }
+            catch (MySqlException ex)
+            {
+                con.Close();
+                Debug.WriteLine("Erreur lors de l'affichage des séances : " + ex.Message);
+            }
+
+        }
+
+        public void ajouterNote(int note)
+        {
+
+            try
+            {
+                int noteFinale = note;
+
+                MySqlCommand commande = new MySqlCommand();
+                commande.Connection = con;
+                commande.CommandText = "INSERT INTO note (numero_adherent, numero_activite, note) (@numeroAdherent, @numeroActivite, @note)";
+                commande.Parameters.AddWithValue("@numeroAdherent", SessionManager.Instance.UsagerConnecte.NumeroIdentification);
+                commande.Parameters.AddWithValue("@note", noteFinale);
+
+                con.Open();
+                commande.Prepare();
+                commande.ExecuteNonQuery();
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                if (con.State == System.Data.ConnectionState.Open) //Pour vérifier que la connexion est ouverte, sinon ca va planter
+                {
+                    con.Close();
+                }
+
+
+            }
+
         }
 
 
