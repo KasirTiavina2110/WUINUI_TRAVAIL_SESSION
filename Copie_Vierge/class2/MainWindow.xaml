@@ -20,6 +20,7 @@
             <!-- Menu principal -->
             <NavigationViewItem Content="Voir activités" x:Name="voirActivite" Icon="Home" ToolTipService.ToolTip="Liste des activités" />
             <NavigationViewItem Content="Voir séances" x:Name="voirSeance" Icon="CalendarDay" ToolTipService.ToolTip="Liste des séances" />
+            <NavigationViewItem Content="Mes séances" x:Name="mesSeances" Icon="Read"  ToolTipService.ToolTip="Mes séances" />
             <!-- Section Accès administrateur -->
             <NavigationViewItem Content="Accès administrateur" x:Name="adminSection" Icon="Admin" ToolTipService.ToolTip="Accès administrateur" SelectsOnInvoked="False">
                 <NavigationViewItem.MenuItems>
