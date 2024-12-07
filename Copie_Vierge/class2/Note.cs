@@ -12,12 +12,6 @@ namespace class2
 
 
 
-
-
-
-
-        //-------NE PAS OUBLIER CA POUR RENDRE L'AFFICHAGE DYNAMIQUE---------------
-
         public event PropertyChangedEventHandler PropertyChanged;
 
 

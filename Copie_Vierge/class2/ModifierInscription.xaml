@@ -13,7 +13,8 @@
                  IsOpen="False"
                  Severity="Error"
                  Title="Erreur"
-                 Message="Les informations saisies existent déjà ou sont invalides." />
+                 Message="Les informations saisies existent déjà ou sont invalides." 
+                 IsClosable="True"/>
 
         <ScrollViewer>
             <StackPanel Margin="20">
