@@ -75,7 +75,15 @@ namespace class2
                         }
                         else
                         {
-                            mainFrame.Navigate(typeof(AffichageActivite));
+                            var modalConnexion2 = new ModalConnexion();
+                            modalConnexion2.XamlRoot = navView.XamlRoot;
+                            await modalConnexion2.ShowAsync();
+
+                            // Redirection après connexion
+                            if (SessionManager.Instance.UsagerConnecte != null)
+                            {
+                                RedirigerSelonRole();
+                            }
 
                         }
                         break;
