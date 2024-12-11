@@ -76,5 +76,10 @@ namespace class2
             }
 
         }
+
+        private void ContentDialog_Closing_1(ContentDialog sender, ContentDialogClosingEventArgs args)
+        {
+
+        }
     }
 }

@@ -23,7 +23,7 @@
                 
             </Grid.ColumnDefinitions>
             <Grid.Background>
-                <ImageBrush ImageSource="https://www.sophieturrel.com/wp-content/uploads/2015/11/mjc-voreppe-activites.jpg" />
+                <ImageBrush ImageSource="https://www.sophieturrel.com/wp-content/uploads/2015/11/mjc-voreppe-activites.jpg" Opacity="0.1" />
             </Grid.Background>
             <!-- Première section -->
             <StackPanel Grid.Row="0" Grid.ColumnSpan="2">

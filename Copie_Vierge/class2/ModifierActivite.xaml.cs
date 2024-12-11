@@ -162,8 +162,8 @@ namespace class2
                 double coutOrganisationActivite = Double.Parse(cout_organisation.Text);
                 double prixVenteActivite = Double.Parse(prix_vente.Text);
                 string imageActivite = image.Text;
-                string typeActivite = choix_type.SelectedIndex.ToString();
-                string anneActivite = choix_annee.SelectedIndex.ToString();
+                string typeActivite = choix_type.SelectedValue.ToString();
+                string anneActivite = choix_annee.SelectedValue.ToString();
 
                 Activite activite = new Activite(identifiant, nomActivite, anneActivite, coutOrganisationActivite, prixVenteActivite, typeActivite, imageActivite);
 

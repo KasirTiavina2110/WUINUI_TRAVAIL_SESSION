@@ -58,7 +58,7 @@
                                 </StackPanel>
 
                                 <StackPanel Margin="5">
-                                    <Button >Noter</Button>
+                                    <Button Click="Button_Click" >Noter</Button>
                                 </StackPanel>
                             </StackPanel>
                         </DataTemplate>
