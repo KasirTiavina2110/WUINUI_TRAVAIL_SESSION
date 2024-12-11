@@ -10,6 +10,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <ScrollViewer>
+        
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -21,7 +22,9 @@
                 <ColumnDefinition Width="*" />
                 
             </Grid.ColumnDefinitions>
-
+            <Grid.Background>
+                <ImageBrush ImageSource="https://www.sophieturrel.com/wp-content/uploads/2015/11/mjc-voreppe-activites.jpg" />
+            </Grid.Background>
             <!-- Première section -->
             <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">

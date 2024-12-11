@@ -1,0 +1,35 @@
+<ContentDialog
+    x:Class="class2.ModalModifInscription"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:class2"
+    Title="Modifier une inscription"
+    PrimaryButtonText="Modifier"
+    CloseButtonText="Annuler"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+
+    <StackPanel Padding="20" Spacing="10">
+        <!-- Sélectionnez un adhérent -->
+        <ComboBox
+            x:Name="ComboAdherent"
+            Header="Adhérent"
+            PlaceholderText="Sélectionnez un adhérent" />
+
+        <!-- Sélectionnez une séance -->
+        <ComboBox
+            x:Name="ComboSeance"
+            Header="Séance"
+            PlaceholderText="Sélectionnez une séance" />
+
+        <!-- Sélectionnez la date d'inscription -->
+                <DatePicker
+            x:Name="DatePickerInscription"
+            Header="Date d'inscription" />
+
+                <TextBox
+            x:Name="TxtHeureInscription"
+            Header="Heure d'inscription"
+            PlaceholderText="HH:mm:ss" />
+
+    </StackPanel>
+</ContentDialog>

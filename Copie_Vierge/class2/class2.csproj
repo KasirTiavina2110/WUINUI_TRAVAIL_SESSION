@@ -20,6 +20,7 @@
     <None Remove="AjouterUsager.xaml" />
     <None Remove="MessagePage.xaml" />
     <None Remove="ModalConnexion.xaml" />
+    <None Remove="ModalModifInscription.xaml" />
     <None Remove="ModalNote.xaml" />
     <None Remove="ModifierActivite.xaml" />
     <None Remove="ModifierSeance.xaml" />
@@ -57,6 +58,11 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ModalModifInscription.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="ModalNote.xaml">

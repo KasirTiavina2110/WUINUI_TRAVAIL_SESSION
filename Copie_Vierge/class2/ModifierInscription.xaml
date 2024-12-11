@@ -7,13 +7,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <!-- Réutilisation des Convertisseurs -->
+        <local:DateFormatter x:Key="DateFormatter" />
+        <local:TimeFormatter x:Key="TimeFormatter" />
+    </Page.Resources>
+
     <Grid>
         <!-- InfoBar pour afficher les messages d'erreur -->
         <InfoBar x:Name="infoBar"
                  IsOpen="False"
                  Severity="Error"
                  Title="Erreur"
-                 Message="Les informations saisies existent déjà ou sont invalides." 
+                 Message="Les informations saisies existent déjà ou sont invalides."
                  IsClosable="True"/>
 
         <ScrollViewer>
@@ -21,51 +27,41 @@
                 <TextBlock Text="Liste des Inscriptions" FontSize="24" FontWeight="Bold" Margin="0 0 0 20" />
 
                 <!-- ListView pour afficher les inscriptions -->
-                <ListView x:Name="listViewInscriptions" 
-                          SelectionMode="Single" 
+                <ListView x:Name="listViewInscriptions"
+                          SelectionMode="Single"
+                          IsItemClickEnabled="True"
                           ItemClick="ListViewInscriptions_ItemClick">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="local:Inscription">
                             <StackPanel>
-                                <TextBlock Text="{Binding Numero_adherent}" />
-                                <TextBlock Text="{Binding Id_seance}" />
-                                <TextBlock Text="{Binding Date_inscription}" />
-                                <!-- Icone delete -->
-                                <Button Content="Delete" 
-                                        HorizontalAlignment="Right" 
-                                        Click="DeleteButton_Click" />
+                                <!-- Affichage des détails -->
+                                <TextBlock>
+                                    <Run Text="Adhérent : " />
+                                    <Run Text="{Binding Numero_adherent}" FontWeight="Bold" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Séance : " />
+                                    <Run Text="{Binding Id_seance}" FontStyle="Italic" />
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Date : " />
+                                    <Run Text="{Binding Date_inscription, Converter={StaticResource DateFormatter}}" Foreground="Gray" />
+                                </TextBlock>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <!-- Boutons -->
+                                    <Button Content="Modifier"
+                                            CommandParameter="{Binding}"
+                                            Click="ModifierButton_Click"
+                                            Margin="5" />
+                                    <Button Content="Supprimer"
+                                            CommandParameter="{Binding}"
+                                            Click="DeleteButton_Click"
+                                            Margin="5" />
+                                </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-
-                <!-- Formulaire de modification de l'inscription -->
-                <StackPanel x:Name="formPanel" Visibility="Collapsed" Margin="20">
-                    <TextBlock Text="Modifier l'inscription" FontSize="20" FontWeight="Bold" Margin="0 0 0 20" />
-
-                    <!-- ComboBox pour numero_identification -->
-                    <TextBlock Text="Adhérent" />
-                    <ComboBox x:Name="comboNumeroIdentification" 
-                              Width="300" 
-                              PlaceholderText="Sélectionnez un adhérent" />
-
-                    <!-- ComboBox pour id_seance -->
-                    <TextBlock Text="Séance" Margin="0 20 0 0" />
-                    <ComboBox x:Name="comboIdSeance" 
-                              Width="300" 
-                              PlaceholderText="Sélectionnez une séance" />
-
-                    <!-- DatePicker pour la date d'inscription -->
-                    <TextBlock Text="Date d'Inscription" Margin="0 20 0 0" />
-                    <DatePicker x:Name="datePickerInscription" 
-                                Width="300" />
-
-                    <!-- Boutons Modifier, Annuler -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 30 0 0">
-                        <Button x:Name="btnModifier" Content="Modifier" Click="btnModifier_Click" Width="100" Margin="10" />
-                        <Button x:Name="btnAnnuler" Content="Annuler" Click="btnAnnuler_Click" Width="100" Margin="10" />
-                    </StackPanel>
-                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Grid>

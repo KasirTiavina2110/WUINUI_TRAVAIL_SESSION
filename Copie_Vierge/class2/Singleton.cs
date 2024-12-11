@@ -1051,10 +1051,11 @@ namespace class2
         {
             try
             {
-                MySqlCommand cmd = new MySqlCommand(@"
+                string query = @"
             SELECT COUNT(*) FROM inscription 
-            WHERE numero_adherent = @numeroAdherent AND id_seance = @idSeance", con);
+            WHERE numero_adherent = @numeroAdherent AND id_seance = @idSeance";
 
+                MySqlCommand cmd = new MySqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
                 cmd.Parameters.AddWithValue("@idSeance", idSeance);
 
@@ -1062,15 +1063,16 @@ namespace class2
                 int count = Convert.ToInt32(cmd.ExecuteScalar());
                 con.Close();
 
-                return count > 0;
+                return count > 0; // Retourne true si une inscription existe
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
-              //  Debug.WriteLine("Erreur lors de la vérification de l'inscription : " + ex.Message);
-                con.Close();
+                Debug.WriteLine($"Erreur lors de la vérification de l'inscription : {ex.Message}");
+                if (con.State == System.Data.ConnectionState.Open) con.Close();
                 return false;
             }
         }
+
 
         // Ajouter une inscription
         public bool AjouterInscription(Inscription inscription)
@@ -1099,31 +1101,37 @@ namespace class2
             }
         }
 
-        public bool ModifierInscription(int idInscription, string numeroAdherent, int idSeance, DateTime dateInscription)
+        public bool ModifierInscription(Inscription inscription)
         {
             try
             {
-                MySqlCommand commande = new MySqlCommand(
-                    "UPDATE inscription SET id_seance = @idSeance, date_inscription = @dateInscription WHERE id_inscription = @idInscription AND numero_adherent = @numeroAdherent", con);
+                string query = @"
+            UPDATE inscription 
+            SET numero_adherent = @numeroAdherent, 
+                id_seance = @idSeance, 
+                date_inscription = @dateInscription
+            WHERE id_inscription = @idInscription";
 
-                commande.Parameters.AddWithValue("@idInscription", idInscription); // Ajoutez l'id de l'inscription
-                commande.Parameters.AddWithValue("@numeroAdherent", numeroAdherent);
-                commande.Parameters.AddWithValue("@idSeance", idSeance);
-                commande.Parameters.AddWithValue("@dateInscription", dateInscription); // Paramètre pour la date
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@numeroAdherent", inscription.Numero_adherent);
+                cmd.Parameters.AddWithValue("@idSeance", inscription.Id_seance);
+                cmd.Parameters.AddWithValue("@dateInscription", inscription.Date_inscription);
+                cmd.Parameters.AddWithValue("@idInscription", inscription.Id_inscription);
 
                 con.Open();
-                int rowsAffected = commande.ExecuteNonQuery();
+                int rowsAffected = cmd.ExecuteNonQuery();
                 con.Close();
 
-                return rowsAffected > 0; // Retourne true si la modification a réussi
+                return rowsAffected > 0;
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
-                // Debug.WriteLine("Erreur lors de la modification de l'inscription : " + ex.Message);
-                if (con.State == ConnectionState.Open) con.Close();
+                Debug.WriteLine($"Erreur lors de la modification de l'inscription : {ex.Message}");
+                if (con.State == System.Data.ConnectionState.Open) con.Close();
                 return false;
             }
         }
+
 
         public bool SupprimerInscription(int idInscription)
         {
@@ -1177,9 +1185,9 @@ namespace class2
 
             return listeInscriptions;
         }
-        public List<Inscription> GetListeInscriptions()
+        public ObservableCollection<Inscription> GetListeInscriptions()
         {
-            List<Inscription> inscriptions = new List<Inscription>();
+            ObservableCollection<Inscription> inscriptions = new ObservableCollection<Inscription>();
             try
             {
                 MySqlCommand command = new MySqlCommand("SELECT * FROM inscription", con);
@@ -1201,9 +1209,14 @@ namespace class2
             catch (Exception ex)
             {
                 Debug.WriteLine($"Erreur lors de la récupération des inscriptions : {ex.Message}");
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
             }
             return inscriptions;
         }
+
     }
 
 
