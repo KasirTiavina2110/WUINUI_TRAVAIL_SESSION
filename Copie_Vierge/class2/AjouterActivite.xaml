@@ -29,6 +29,11 @@
             <ColumnDefinition Width="*" />
 
         </Grid.ColumnDefinitions>
+            <Grid.Background>
+                <ImageBrush ImageSource="https://previews.123rf.com/images/redlinevector/redlinevector1712/redlinevector171200558/91761360-activit%C3%A9-de-loisirs-icon-set.jpg"
+                            Stretch="UniformToFill"
+                            Opacity="0.5"/>
+            </Grid.Background>
 
         <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <TextBlock FontSize="25" Margin="0 25 0 25" TextDecorations="Underline">Formulaire d'ajouts d'activités</TextBlock>

@@ -12,7 +12,7 @@
         <Grid.Background>
             <ImageBrush ImageSource="https://www.shutterstock.com/image-vector/registration-icon-line-style-monitor-260nw-2525262363.jpg"
                         Stretch="UniformToFill"
-                        Opacity="0.2" />
+                        Opacity="0.5" />
         </Grid.Background>
 
         <!-- InfoBar pour afficher les messages -->
