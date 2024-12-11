@@ -8,16 +8,30 @@
     mc:Ignorable="d">
 
     <Grid>
+        <!-- Image de fond -->
+        <Grid.Background>
+            <ImageBrush ImageSource="https://www.shutterstock.com/image-vector/registration-icon-line-style-monitor-260nw-2525262363.jpg"
+                        Stretch="UniformToFill"
+                        Opacity="0.2" />
+        </Grid.Background>
+
         <!-- InfoBar pour afficher les messages -->
         <InfoBar x:Name="infoBar"
                  IsOpen="False"
                  Severity="Error"
                  Title="Erreur"
-                 Message="Erreur lors du chargement des inscriptions." />
+                 Message="Erreur lors du chargement des inscriptions."
+                 Margin="20" />
 
+        <!-- Contenu principal -->
         <ScrollViewer>
-            <StackPanel Margin="20">
-                <TextBlock Text="Liste des inscriptions" FontSize="24" FontWeight="Bold" Margin="0 0 0 20" />
+            <StackPanel Margin="20" Spacing="20">
+                <!-- Titre -->
+                <TextBlock Text="Liste des inscriptions" 
+                           FontSize="28" 
+                           FontWeight="Bold" 
+                           Foreground="Navy" 
+                           HorizontalAlignment="Center" />
 
                 <!-- ListView pour afficher les inscriptions -->
                 <ListView x:Name="listViewInscriptions"
@@ -27,23 +41,52 @@
                           Margin="0 20 0 0">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Spacing="10">
-                                <TextBlock Text="Adhérent:" FontWeight="Bold" />
-                                <TextBlock Text="{Binding Numero_adherent}" />
-                                <TextBlock Text="| Séance:" FontWeight="Bold" />
-                                <TextBlock Text="{Binding Id_seance}" />
-                            </StackPanel>
+                            <Border BorderBrush="DarkGray" 
+                                    BorderThickness="1" 
+                                    CornerRadius="5" 
+                                    Padding="10" 
+                                    Margin="5">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Adhérent -->
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding Numero_adherent}" 
+                                               FontWeight="Bold" 
+                                               FontSize="16"
+                                               Foreground="DarkGreen" />
+
+                                    <!-- Séance -->
+                                    <TextBlock Grid.Column="1" 
+                                               Text="{Binding Id_seance}" 
+                                               FontWeight="Bold" 
+                                               FontSize="16"
+                                               Foreground="Sienna" 
+                                               HorizontalAlignment="Right" />
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
 
                 <!-- Bouton pour modifier l'inscription sélectionnée -->
                 <Button x:Name="btnModifier"
-                        Content="Modifier"
+                        Content="Modifier l'inscription"
                         Click="btnModifier_Click"
                         Width="200"
-                        Margin="0 20 0 0"
-                        HorizontalAlignment="Center" />
+                        Height="50"
+                        HorizontalAlignment="Center"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Background="DarkBlue"
+                        Foreground="White"
+                        CornerRadius="10" />
             </StackPanel>
         </ScrollViewer>
     </Grid>
