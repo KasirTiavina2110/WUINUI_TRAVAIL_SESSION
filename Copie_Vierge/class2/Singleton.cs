@@ -396,13 +396,17 @@ namespace class2
         public int supprimerUsager(string matricule)
         {
 
-            string numero_identifiaction = matricule;
+            string numero_identification = matricule;
 
             MySqlCommand commande = new MySqlCommand();
 
             commande.Connection = con;
             commande.CommandText = "DELETE FROM adherent WHERE numero_identification = @matricule";
+<<<<<<< HEAD
             commande.Parameters.AddWithValue("@matricule", numero_identifiaction);
+=======
+            commande.Parameters.AddWithValue("@matricule", numero_identification);
+>>>>>>> 107c6a36e73aeea95950f2a36d27ffaa3ce44f80
 
             con.Open();
             commande.Prepare();
@@ -417,13 +421,17 @@ namespace class2
         //Vérifier si un matricule return 1 ou 0
         public int verifierSiExiste(string matricule)
         {
-            string id_activite = matricule;
+            string numero_identification = matricule;
 
             MySqlCommand commande = new MySqlCommand();
 
             commande.Connection = con;
             commande.CommandText = "SELECT COUNT(*) FROM adherent WHERE numero_identification = @matricule";
+<<<<<<< HEAD
             commande.Parameters.AddWithValue("@matricule", id_activite);
+=======
+            commande.Parameters.AddWithValue("@matricule", numero_identification);
+>>>>>>> 107c6a36e73aeea95950f2a36d27ffaa3ce44f80
 
             con.Open();
             commande.Prepare();
@@ -443,13 +451,17 @@ namespace class2
 
             Usager utilisateur = null;
 
-            string id_activite = matricule;
+            string numero_identification = matricule;
 
             MySqlCommand commande = new MySqlCommand();
 
             commande.Connection = con;
             commande.CommandText = "SELECT * FROM adherent WHERE numero_identification = @matricule";
+<<<<<<< HEAD
             commande.Parameters.AddWithValue("@matricule", id_activite);
+=======
+            commande.Parameters.AddWithValue("@matricule", numero_identification);
+>>>>>>> 107c6a36e73aeea95950f2a36d27ffaa3ce44f80
 
             con.Open();
 
@@ -488,7 +500,11 @@ namespace class2
             commande.Connection = con;
             commande.CommandText = "UPDATE adherent " +
                 "SET nom = @nom, prenom = @prenom, adresse = @adresse, date_naissance = @dateNaissance, age = @age, role = @role " +
+<<<<<<< HEAD
                 " WHERE numero_identification = @matricule";
+=======
+                " WHERE numero_identifiaction = @matricule";
+>>>>>>> 107c6a36e73aeea95950f2a36d27ffaa3ce44f80
             commande.Parameters.AddWithValue("@matricule", usager.NumeroIdentification);
             commande.Parameters.AddWithValue("@nom", usager.Nom);
             commande.Parameters.AddWithValue("@prenom", usager.Prenom);
